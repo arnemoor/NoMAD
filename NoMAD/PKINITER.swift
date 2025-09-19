@@ -41,7 +41,7 @@ func launchPKINITer() {
     let pkinitPathURL = URL(fileURLWithPath: bundlePath! + "/PKINITer.app")
 
     do {
-        try NSWorkspace.shared().launchApplication(at: pkinitPathURL, options: NSWorkspaceLaunchOptions.withoutAddingToRecents, configuration: configArgs)
+    try NSWorkspace.shared.launchApplication(at: pkinitPathURL, options: NSWorkspaceLaunchOptions.withoutAddingToRecents, configuration: configArgs)
     } catch {
     // handle the error here
     myLogger.logit(.base, message: "Unable to launch PKINITer.")

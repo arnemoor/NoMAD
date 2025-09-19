@@ -231,7 +231,7 @@ class UserInformation {
                     }
                 }
 
-                    if ( passwordExpirationLength.characters.count > 15 ) {
+                    if ( passwordExpirationLength.count > 15 ) {
                         passwordAging = false
                     } else if ( passwordExpirationLength != "" ) {
                         if ~~( Int(userPasswordUACFlag)! & 0x10000 ) {

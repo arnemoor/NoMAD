@@ -27,7 +27,7 @@ public func cliTask( _ command: String, arguments: [String]? = nil) -> String {
             var x = 0
 
             for line in commandPieces {
-                if line.characters.last == "\\" {
+                if line.last == "\\" {
                     commandPieces[x] = commandPieces[x].replacingOccurrences(of: "\\", with: " ") + commandPieces.remove(at: x+1)
                     x -= 1
                 }
@@ -89,7 +89,7 @@ public func cliTaskNoTerm( _ command: String) -> String {
         var x = 0
 
         for line in commandPieces {
-            if line.characters.last == "\\" {
+            if line.last == "\\" {
                 commandPieces[x] = commandPieces[x].replacingOccurrences(of: "\\", with: " ") + commandPieces.remove(at: x+1)
                 x -= 1
             }

@@ -414,14 +414,14 @@ class LDAPServers : NSObject, DNSResolverDelegate {
                 continue
             }
 
-            var attribute = ldifLines[lineIndex].characters.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: false).map(String.init)
+            var attribute = ldifLines[lineIndex].split(separator: ":", maxSplits: 1, omittingEmptySubsequences: false).map(String.init)
             if attribute.count == 2 {
 
                 // Get the attribute name (before ;),
                 // then add to attributes array if it doesn't exist.
                 var attributeName = attribute[0].trim()
-                if let index = attributeName.characters.index(of: ";") {
-                    attributeName = attributeName.substring(to: index)
+                if let index = attributeName.firstIndex(of: ";") {
+                    attributeName = String(attributeName[..<index])
                 }
                 if !attributes.contains(attributeName) {
                     attributes.insert(attributeName)
@@ -433,10 +433,10 @@ class LDAPServers : NSObject, DNSResolverDelegate {
                 // If
                 if attributeValue.hasPrefix("<") {
                     // url
-                    attributeValue = attributeValue.substring(from: attributeValue.characters.index(after: attributeValue.startIndex)).trim()
+                    attributeValue = String(attributeValue[attributeValue.index(after: attributeValue.startIndex)...]).trim()
                 } else if attributeValue.hasPrefix(":") {
                     // base64
-                    let tempAttributeValue = attributeValue.substring(from: attributeValue.characters.index(after: attributeValue.startIndex)).trim()
+                    let tempAttributeValue = String(attributeValue[attributeValue.index(after: attributeValue.startIndex)...]).trim()
                     if (Data(base64Encoded: tempAttributeValue, options: NSData.Base64DecodingOptions.init(rawValue: 0)) != nil) {
                         attributeValue = tempAttributeValue
                     } else {
@@ -449,7 +449,7 @@ class LDAPServers : NSObject, DNSResolverDelegate {
 
                 // save attribute value or append it to the existing
                 if let val = record[attributeName] {
-                    //record[attributeName] = "\"" + val.substringWithRange(Range<String.Index>(start: val.startIndex.successor(), end: val.endIndex.predecessor())) + ";" + attributeValue + "\""
+                    //record[attributeName] = "\"" + String(val[val.index(after: val.startIndex)..<val.index(before: val.endIndex)]) + ";" + attributeValue + "\""
                     record[attributeName] = val + ";" + attributeValue
                 } else {
                     record[attributeName] = attributeValue
@@ -506,13 +506,13 @@ class LDAPServers : NSObject, DNSResolverDelegate {
      private func cleanLDAPResults(result: String, attribute: String) -> String {
      var myResult = ""
 
-     let lines = result.componentsSeparatedByString("\n")
+    let lines = result.components(separatedBy: "\n")
 
-     for i in lines {
-     if (i.containsString(attribute)) {
-     myResult = line.stringByReplacingOccurrencesOfString( attribute + ": ", withString: "")
-     break
-     }
+    for i in lines {
+    if i.contains(attribute) {
+    myResult = i.replacingOccurrences(of: attribute + ": ", with: "")
+    break
+    }
 
      }
      return myResult

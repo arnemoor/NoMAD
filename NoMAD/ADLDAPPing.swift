@@ -121,7 +121,7 @@ class ADLDAPPing {
     }
 
     init?( ldapPingBase64String: String ) {
-        //let cleanedNetlogonBase64String = netlogonBase64String.componentsSeparatedByString(": ")[1]
+    //let cleanedNetlogonBase64String = netlogonBase64String.components(separatedBy: ": ")[1]
         guard let netlogonData = Data(base64Encoded: ldapPingBase64String, options: []) else {
             myLogger.logit(.notice, message: "Netlogon base64 encoded string is invalid.")
             return nil

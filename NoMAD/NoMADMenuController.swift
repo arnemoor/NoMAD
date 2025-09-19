@@ -132,7 +132,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         // AppleEvents
 
         LSSetDefaultHandlerForURLScheme("nomad" as CFString, "com.trusourcelabs.NoMAD" as CFString)
-        let eventManager = NSAppleEventManager.shared()
+    let eventManager = NSAppleEventManager.shared
 
         eventManager.setEventHandler(self, andSelector: #selector(handleAppleEvent), forEventClass: AEEventClass(kInternetEventClass), andEventID: AEEventID(kAEGetURL))
         
@@ -185,7 +185,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         }
 
         let defaultPreferences = NSDictionary(contentsOf: Bundle.main.url(forResource: "DefaultPreferences", withExtension: "plist")!)
-        defaults.register(defaults: defaultPreferences as! [String : Any])
+    defaults.register(defaults: defaultPreferences as! [String : Any])
 
         // Register for update notifications.
         NotificationCenter.default.addObserver(self, selector: #selector(doTheNeedfull), name: NSNotification.Name(rawValue: "updateNow"), object: nil)
@@ -377,9 +377,9 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
                 let name = defaults.string(forKey: Preferences.lastUser)! + "@" + defaults.string(forKey: Preferences.kerberosRealm)!
 
                 myErr = SecKeychainFindGenericPassword(nil,
-                                                       UInt32(serviceName.characters.count),
+                                                       UInt32(serviceName.count),
                                                        serviceName,
-                                                       UInt32(name.characters.count),
+                                                       UInt32(name.count),
                                                        name,
                                                        &passLength,
                                                        &passPtr, &myKeychainItem)
@@ -422,9 +422,9 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             let name = defaults.string(forKey: Preferences.lastUser)! + "@" + defaults.string(forKey: Preferences.kerberosRealm)!
 
             myErr = SecKeychainFindGenericPassword(nil,
-                                                   UInt32(serviceName.characters.count),
+                                                   UInt32(serviceName.count),
                                                    serviceName,
-                                                   UInt32(name.characters.count),
+                                                   UInt32(name.count),
                                                    name,
                                                    &passLength,
                                                    &passPtr, &myKeychainItem)
@@ -497,11 +497,11 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
         switch selfService {
         case .casper:
-            NSWorkspace.shared().launchApplication("/Applications/Self Service.app")
+            NSWorkspace.shared.launchApplication("/Applications/Self Service.app")
         case .lanrev:
             cliTask("/Library/Application\\ Support/LANrev\\ Agent/LANrev\\ Agent.app/Contents/MacOS/LANrev\\ Agent --ShowOnDemandPackages")
         case .munki:
-            NSWorkspace.shared().launchApplication("/Applications/Managed Software Center.app")
+            NSWorkspace.shared.launchApplication("/Applications/Managed Software Center.app")
         case .custom:
             cliTask("/usr/bin/open " + defaults.string(forKey: Preferences.selfServicePath)!)
         }
@@ -528,7 +528,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
     // quit when asked
     @IBAction func NoMADMenuClickQuit(_ sender: NSMenuItem) {
-        NSApplication.shared().terminate(self)
+    NSApplication.shared.terminate(self)
     }
 
     // show PKINITer when asked
@@ -911,9 +911,9 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
                 let name = defaults.string(forKey: Preferences.lastUser)! + "@" + defaults.string(forKey: Preferences.kerberosRealm)!
 
                 myErr = SecKeychainFindGenericPassword(nil,
-                                                       UInt32(serviceName.characters.count),
+                                                       UInt32(serviceName.count),
                                                        serviceName,
-                                                       UInt32(name.characters.count),
+                                                       UInt32(name.count),
                                                        name,
                                                        &passLength,
                                                        &passPtr, &myKeychainItem)
@@ -1220,7 +1220,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
                             if defaults.string(forKey: Preferences.passwordExpireCustomAlert) != nil {
 
-                                let len = defaults.string(forKey: Preferences.passwordExpireCustomAlert)?.characters.count
+                                let len = defaults.string(forKey: Preferences.passwordExpireCustomAlert)?.count
 
                                 if Int(daysToGo) < defaults.integer(forKey: Preferences.passwordExpireCustomAlertTime) {
                                     let myMutableString = NSMutableAttributedString(string: defaults.string(forKey: Preferences.passwordExpireCustomAlert)!)

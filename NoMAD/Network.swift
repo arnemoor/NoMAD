@@ -69,10 +69,10 @@ internal struct Network {
  let value = SCDynamicStoreCopyValue(store, key) as! [String:AnyObject]
 
  if let searchDomains = value["SearchDomains"] as? [String] {
- if searchDomains.contains(currentDomain.lowercaseString) {
+ if searchDomains.contains(currentDomain.lowercased()) {
  // get the interface GUID
  guard let dnsGUID = searchDomainKeys[i] as? String else { return interfaceName }
- let interfaceGUID = dnsGUID.stringByReplacingOccurrencesOfString("DNS", withString: "IPv4")
+ let interfaceGUID = dnsGUID.replacingOccurrences(of: "DNS", with: "IPv4")
  // look up the service
  guard let interfaceList = SCDynamicStoreCopyValue(store, interfaceGUID) as? [String:AnyObject] else { return interfaceName }
  interfaceName = interfaceList["InterfaceName"] as? String
@@ -223,11 +223,11 @@ internal struct Network {
 	let interfaceRaw = cliTask("/sbin/route get " + currentServer )
 
 
-	if interfaceRaw.containsString("interface") {
- for line in interfaceRaw.componentsSeparatedByString("\n") {
- if line.containsString("interface") {
+     if interfaceRaw.contains("interface") {
+ for line in interfaceRaw.components(separatedBy: "\n") {
+ if line.contains("interface") {
  myLogger.logit(.debug, message: line)
- return line.stringByReplacingOccurrencesOfString("  interface: ", withString: "").stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+ return line.replacingOccurrences(of: "  interface: ", with: "").trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
  }
  }
 	}

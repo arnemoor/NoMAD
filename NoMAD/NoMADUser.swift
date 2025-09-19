@@ -104,8 +104,8 @@ class NoMADUser {
 
             if let originalAuthenticationAuthority = try? String(describing: currentConsoleUserRecord.values(forAttribute: "dsAttrTypeStandard:OriginalAuthenticationAuthority")[0]) {
                 let range = originalAuthenticationAuthority.range(of: "(?<=Kerberosv5;;).+@[^;]+", options:.regularExpression)
-                if range != nil {
-                    return originalAuthenticationAuthority.substring(with: range!)
+                if let range = range {
+                    return String(originalAuthenticationAuthority[range])
                 }
                 myLogger.logit(LogLevel.debug, message: "Somehow an AD user does not have OriginalAuthenticationAuthority")
             }
@@ -206,7 +206,7 @@ class NoMADUser {
         }
 
         // Test if the keychain password is correct by trying to unlock it.
-        let passwordLength = UInt32(password.characters.count)
+    let passwordLength = UInt32(password.count)
         err = SecKeychainUnlock(myDefaultKeychain, passwordLength, password, true)
         if (err == noErr) {
             return true
@@ -363,7 +363,7 @@ class NoMADUser {
 
         var oldPasswordMutable = oldPassword
 
-        err = SecKeychainUnlock(myDefaultKeychain, UInt32(oldPasswordMutable.characters.count), &oldPasswordMutable, true)
+    err = SecKeychainUnlock(myDefaultKeychain, UInt32(oldPasswordMutable.count), &oldPasswordMutable, true)
 
         if err != noErr {
             myLogger.logit(LogLevel.base, message: "Error unlocking default keychain to sync password.")
@@ -371,7 +371,7 @@ class NoMADUser {
             return
         }
 
-        err = SecKeychainChangePassword(myDefaultKeychain, UInt32(oldPassword.characters.count), oldPassword, UInt32(newPassword1.characters.count), newPassword1)
+    err = SecKeychainChangePassword(myDefaultKeychain, UInt32(oldPassword.count), oldPassword, UInt32(newPassword1.count), newPassword1)
 
         if (err == noErr) {
             myLogger.logit(LogLevel.info, message: "Changed keychain password successfully.")
