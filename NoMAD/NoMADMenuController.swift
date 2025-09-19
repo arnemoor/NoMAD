@@ -200,6 +200,16 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         // Allows us to force windows to show when menu clicked.
         self.NoMADMenu.delegate = self
 
+        // Configure the status item button to explicitly pop up the menu when clicked.
+        // In macOS 26 setting `statusItem.menu` can make the item unclickable in some cases,
+        // so explicitly wiring the button action and using `popUpMenu(_:)` is more reliable.
+        if let button = self.statusItem.button {
+            button.target = self
+            button.action = #selector(statusItemClicked(_:))
+            // Accept both left and right clicks
+            button.sendAction(on: [.leftMouseUp, .rightMouseUp])
+        }
+
         // see if we should auto-configure
         setDefaults()
 
@@ -1015,6 +1025,23 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         }
     }
 
+    // Explicit click handler for the status item button. This ensures the menu is shown
+    // on click across macOS versions including macOS 26 where setting `statusItem.menu`
+    // may prevent clicks from being delivered to the process.
+    @objc func statusItemClicked(_ sender: Any?) {
+        // If the menu is already open, close it by cancelTracking
+        if let event = NSApp.currentEvent, event.type == .rightMouseUp {
+            // Right click: show contextual menu
+            statusItem.popUpMenu(NoMADMenu)
+            return
+        }
+
+        // Left click: show the main menu
+        // Ensure the app is activated to allow windows to appear above other apps
+        NSApp.activate(ignoringOtherApps: true)
+        statusItem.popUpMenu(NoMADMenu)
+    }
+
     func stopMenuAnimationTimer() {
         if menuAnimated{
             menuAnimationTimer.invalidate()
@@ -1158,7 +1185,10 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
                     // build the menu
 
-                    self.statusItem.menu = self.NoMADMenu
+                    // Do not assign statusItem.menu on macOS 26 because it may prevent the
+                    // status item's button from receiving click events. Keep the menu
+                    // available and use popUpMenu in the button handler instead.
+                    self.statusItem.menu = nil
 
                     // set the menu icon
                     if self.userInformation.status == "Connected" {
