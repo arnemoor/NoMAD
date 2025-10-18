@@ -104,7 +104,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
     var selfService: SelfServiceType?
 
-    let statusItem = NSStatusBar.system().statusItem(withLength: NSVariableStatusItemLength)
+    let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     
     let PKINITMenuItem = NSMenuItem()
     
@@ -132,8 +132,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         // AppleEvents
 
         LSSetDefaultHandlerForURLScheme("nomad" as CFString, "com.trusourcelabs.NoMAD" as CFString)
-    let eventManager = NSAppleEventManager.shared
-
+        let eventManager = NSAppleEventManager.shared()
         eventManager.setEventHandler(self, andSelector: #selector(handleAppleEvent), forEventClass: AEEventClass(kInternetEventClass), andEventID: AEEventID(kAEGetURL))
         
         // set up Icons - we need 2 sets of 2 for light and dark modes
@@ -141,25 +140,25 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         if defaults.string(forKey: Preferences.iconOn) != nil {
             myIconOn = NSImage.init(contentsOfFile: defaults.string(forKey: Preferences.iconOn)!)!
         } else {
-            myIconOn = NSImage(named: "NoMAD-statusicon-on-on")!
+            myIconOn = NSImage(named: NSImage.Name("NoMAD-statusicon-on-on"))!
         }
         
         if defaults.string(forKey: Preferences.iconOff) != nil {
             myIconOff = NSImage.init(contentsOfFile: defaults.string(forKey: Preferences.iconOff)!)!
         } else {
-            myIconOff = NSImage(named: "NoMAD-statusicon-off-off")!
+            myIconOff = NSImage(named: NSImage.Name("NoMAD-statusicon-off-off"))!
         }
         
         if defaults.string(forKey: Preferences.iconOnDark) != nil {
             myIconOnDark = NSImage.init(contentsOfFile: defaults.string(forKey: Preferences.iconOnDark)!)!
         } else {
-            myIconOnDark = NSImage(named: "NoMAD-LogoAlternate-on")!
+            myIconOnDark = NSImage(named: NSImage.Name("NoMAD-LogoAlternate-on"))!
         }
         
         if defaults.string(forKey: Preferences.iconOffDark) != nil {
             myIconOffDark = NSImage.init(contentsOfFile: defaults.string(forKey: Preferences.iconOffDark)!)!
         } else {
-            myIconOffDark = NSImage(named: "NoMAD-LogoAlternate-off")!
+            myIconOffDark = NSImage(named: NSImage.Name("NoMAD-LogoAlternate-off"))!
         }
 
         // check for Dark Mode
@@ -167,24 +166,24 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         if UserDefaults.standard.persistentDomain(forName: UserDefaults.globalDomain)?["AppleInterfaceStyle"] == nil {
             if !defaults.bool(forKey: Preferences.caribouTime) {
                 iconOnOn = myIconOn
-                iconOnOff = NSImage(named: "NoMAD-statusicon-on-off")!
+                iconOnOff = NSImage(named: NSImage.Name("NoMAD-statusicon-on-off"))!
                 iconOffOff = myIconOff
             } else {
-                iconOnOn = NSImage(named: "NoMAD-Caribou-on")!
-                iconOffOff = NSImage(named: "NoMAD-Caribou-off")!
+                iconOnOn = NSImage(named: NSImage.Name("NoMAD-Caribou-on"))!
+                iconOffOff = NSImage(named: NSImage.Name("NoMAD-Caribou-off"))!
             }
         } else {
             if !defaults.bool(forKey: Preferences.caribouTime) {
                 iconOnOn = myIconOnDark
-                //iconOnOff = NSImage(named: "NoMAD-statusicon-on-off")
+                //iconOnOff = NSImage(named: NSImage.Name("NoMAD-statusicon-on-off")
                 iconOffOff = myIconOffDark
             } else {
-                iconOnOn = NSImage(named: "NoMAD-Caribou-dark-on")!
-                iconOffOff = NSImage(named: "NoMAD-Caribou-dark-off")!
+                iconOnOn = NSImage(named: NSImage.Name("NoMAD-Caribou-dark-on"))!
+                iconOffOff = NSImage(named: NSImage.Name("NoMAD-Caribou-dark-off"))!
             }
         }
 
-        let defaultPreferences = NSDictionary(contentsOf: Bundle.main.url(forResource: "DefaultPreferences", withExtension: "plist")!)
+        let defaultPreferences = NSDictionary(contentsOf: Bundle.main.url(forResource: "DefaultPreferences", withExtension: "plist")!)!
     defaults.register(defaults: defaultPreferences as! [String : Any])
 
         // Register for update notifications.
@@ -477,7 +476,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
         let libHandle = dlopen("/System/Library/PrivateFrameworks/login.framework/Versions/Current/login", RTLD_LAZY)
         let sym = dlsym(libHandle, "SACLockScreenImmediate")
-        typealias myFunction = @convention(c) (Void) -> Void
+        typealias myFunction = @convention(c) () -> Void
         let SACLockScreenImmediate = unsafeBitCast(sym, to: myFunction.self)
         SACLockScreenImmediate()
     }
@@ -533,7 +532,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
     // show PKINITer when asked
 
-    func smartcardSignIn() {
+    @objc func smartcardSignIn() {
         launchPKINITer()
     }
 
@@ -566,7 +565,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
                     alertController.addButton(withTitle: "Cancel".translate)
                     alertController.addButton(withTitle: "RequestAnyway".translate)
 
-                    myResponse = alertController.runModal()
+                    myResponse = alertController.runModal().rawValue
 
                     if myResponse == 1000 {
                         return
@@ -814,7 +813,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
     }
 
     // everything to do on a network change
-    func doTheNeedfull() {
+    @objc func doTheNeedfull() {
 
         if ( self.userInformation.myLDAPServers.getDomain() == "not set" ) {
             //self.userInformation.myLDAPServers.tickets.getDetails()
@@ -825,7 +824,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
     }
 
     // simple function to renew tickets
-    func renewTickets(){
+    @objc func renewTickets(){
         cliTask("/usr/bin/kinit -R")
         userInformation.myLDAPServers.tickets.getDetails()
         if defaults.bool(forKey: Preferences.verbose) == true {
@@ -833,7 +832,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         }
     }
 
-    func animateMenuItem() {
+    @objc func animateMenuItem() {
         if statusItem.image == iconOnOn {
             statusItem.image = iconOffOff
         } else {
@@ -935,24 +934,24 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
     // change the menu item if it's dark
 
-    func interfaceModeChanged() {
+    @objc func interfaceModeChanged() {
         if UserDefaults.standard.persistentDomain(forName: UserDefaults.globalDomain)?["AppleInterfaceStyle"] == nil {
             if !defaults.bool(forKey: Preferences.caribouTime) {
                 iconOnOn = myIconOn
-                iconOnOff = NSImage(named: "NoMAD-statusicon-on-off")!
+                iconOnOff = NSImage(named: NSImage.Name("NoMAD-statusicon-on-off"))!
                 iconOffOff = myIconOff
             } else {
-                iconOnOn = NSImage(named: "NoMAD-Caribou-on")!
-                iconOffOff = NSImage(named: "NoMAD-Caribou-off")!
+                iconOnOn = NSImage(named: NSImage.Name("NoMAD-Caribou-on"))!
+                iconOffOff = NSImage(named: NSImage.Name("NoMAD-Caribou-off"))!
             }
         } else {
             if !defaults.bool(forKey: Preferences.caribouTime) {
                 iconOnOn = myIconOnDark
-                //iconOnOff = NSImage(named: "NoMAD-statusicon-on-off")
+                //iconOnOff = NSImage(named: NSImage.Name("NoMAD-statusicon-on-off")
                 iconOffOff = myIconOffDark
             } else {
-                iconOnOn = NSImage(named: "NoMAD-Caribou-dark-on")!
-                iconOffOff = NSImage(named: "NoMAD-Caribou-dark-off")!
+                iconOnOn = NSImage(named: NSImage.Name("NoMAD-Caribou-dark-on"))!
+                iconOffOff = NSImage(named: NSImage.Name("NoMAD-Caribou-dark-off"))!
             }
         }
         if self.userInformation.status == "Connected" {
@@ -981,7 +980,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         statusItem.popUpMenu(NoMADMenu)
     }
 
-    func handleAppleEvent(_ event: NSAppleEventDescriptor, withReplyEvent: NSAppleEventDescriptor) {
+    @objc func handleAppleEvent(_ event: NSAppleEventDescriptor, withReplyEvent: NSAppleEventDescriptor) {
         let fullCommand = URL(string: (event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue)!)
 
         let command = fullCommand?.host
@@ -1039,23 +1038,6 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             menuAnimationTimer.fire()
             menuAnimated = true
         }
-    }
-
-    // Explicit click handler for the status item button. This ensures the menu is shown
-    // on click across macOS versions including macOS 26 where setting `statusItem.menu`
-    // may prevent clicks from being delivered to the process.
-    @objc func statusItemClicked(_ sender: Any?) {
-        // If the menu is already open, close it by cancelTracking
-        if let event = NSApp.currentEvent, event.type == .rightMouseUp {
-            // Right click: show contextual menu
-            statusItem.popUpMenu(NoMADMenu)
-            return
-        }
-
-        // Left click: show the main menu
-        // Ensure the app is activated to allow windows to appear above other apps
-        NSApp.activate(ignoringOtherApps: true)
-        statusItem.popUpMenu(NoMADMenu)
     }
 
     func stopMenuAnimationTimer() {
@@ -1133,7 +1115,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
     // update the user info and build the actual menu
 
-    func updateUserInfo() {
+    @objc func updateUserInfo() {
 
         myLogger.logit(.base, message:"Updating User Info")
         updateRunning = true
@@ -1240,14 +1222,14 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
                                 if Int(daysToGo) < defaults.integer(forKey: Preferences.passwordExpireCustomAlertTime) {
                                     let myMutableString = NSMutableAttributedString(string: defaults.string(forKey: Preferences.passwordExpireCustomAlert)!)
-                                    myMutableString.addAttribute(NSForegroundColorAttributeName, value: NSColor.red, range: NSRange(location: 0, length: len!))
+                                    myMutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: NSColor.red, range: NSRange(location: 0, length: len!))
 
                                     self.statusItem.attributedTitle = myMutableString
                                     self.statusItem.attributedTitle = myMutableString
 
                                 } else if Int(daysToGo) < defaults.integer(forKey: Preferences.passwordExpireCustomWarnTime) {
                                     let myMutableString = NSMutableAttributedString(string: defaults.string(forKey: Preferences.passwordExpireCustomAlert)!)
-                                    myMutableString.addAttribute(NSForegroundColorAttributeName, value: NSColor.yellow, range: NSRange(location: 0, length: len!))
+                                    myMutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: NSColor.yellow, range: NSRange(location: 0, length: len!))
 
                                     self.statusItem.attributedTitle = myMutableString
                                     self.statusItem.attributedTitle = myMutableString
@@ -1266,7 +1248,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
                             } else {
 
                                 let myMutableString = NSMutableAttributedString(string: String(daysToGo) + "d".translate)
-                                myMutableString.addAttribute(NSForegroundColorAttributeName, value: NSColor.red, range: NSRange(location: 0, length: 2))
+                                myMutableString.addAttribute(NSAttributedString.Key.foregroundColor, value: NSColor.red, range: NSRange(location: 0, length: 2))
                                 self.statusItem.attributedTitle = myMutableString
                                 self.statusItem.attributedTitle = myMutableString
                                 self.NoMADMenuPasswordExpires.title = String(format: "NoMADMenuController-PasswordExpiresInDays".translate, String(daysToGo))
@@ -1356,7 +1338,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
                         // Share Mounter setup taken out for now
 
-                        //self.myShareMounter.asyncMountShare("smb:" + defaults.stringForKey("UserHome")!)
+                        //self.myShareMounter.asyncMountShare("smb:" + defaults.stringForKey("UserHome"))!)
                         //self.myShareMounter.mount()
                     }
                 })

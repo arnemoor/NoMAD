@@ -51,8 +51,8 @@ class PasswordChangeWindow: NSWindowController, NSWindowDelegate, NSTextFieldDel
     
     var policy: PasswordPolicy?
 
-    override var windowNibName: String! {
-        return "PasswordChangeWindow"
+    override var windowNibName: NSNib.Name? {
+        return NSNib.Name("PasswordChangeWindow")
     }
 
     override func windowDidLoad() {
@@ -75,8 +75,8 @@ class PasswordChangeWindow: NSWindowController, NSWindowDelegate, NSTextFieldDel
             // set up a text field delegate
             newPassword.delegate = self
             newPasswordAgain.delegate = self
-            policyAlert.image = NSImage.init(imageLiteralResourceName: NSImageNameStatusUnavailable)
-            secondaryAlert.image = NSImage.init(imageLiteralResourceName: NSImageNameStatusUnavailable)
+            policyAlert.image = NSImage(named: NSImage.Name.statusUnavailable)
+            secondaryAlert.image = NSImage(named: NSImage.Name.statusUnavailable)
 
             passwordChangeButton.isEnabled = false
         }
@@ -178,7 +178,7 @@ class PasswordChangeWindow: NSWindowController, NSWindowDelegate, NSTextFieldDel
                 }
 
                 alertController.beginSheetModal(for: self.window!, completionHandler: {( response ) in
-                    if ( response == 0 ) {
+                    if ( response.rawValue == 0 ) {
                         self.close()
                     } else {
                         self.close()
@@ -262,7 +262,7 @@ class PasswordChangeWindow: NSWindowController, NSWindowDelegate, NSTextFieldDel
     override func controlTextDidEndEditing(_ obj: Notification) {
         
         if obj.object.unsafelyUnwrapped as! NSSecureTextField == newPassword {
-            if policyAlert.image == NSImage.init(imageLiteralResourceName: NSImageNameStatusUnavailable) {
+            if policyAlert.image == NSImage(named: NSImage.Name.statusUnavailable) {
                 showPopover(object: newPassword)
             }
         }
@@ -276,35 +276,35 @@ class PasswordChangeWindow: NSWindowController, NSWindowDelegate, NSTextFieldDel
             let result = policy?.checkPassword(pass: newPassword.stringValue, username: defaults.string(forKey: Preferences.userShortName)!)
             if result == "" {
                 popText.stringValue = "All required policies met."
-                policyAlert.image = NSImage.init(imageLiteralResourceName: NSImageNameStatusAvailable)
+                policyAlert.image = NSImage(named: NSImage.Name.statusAvailable)
             } else {
                 popText.stringValue = result!
-                policyAlert.image = NSImage.init(imageLiteralResourceName: NSImageNameStatusUnavailable)
+                policyAlert.image = NSImage(named: NSImage.Name.statusUnavailable)
             }
             if newPasswordAgain.stringValue == newPassword.stringValue && newPassword.stringValue != "" {
-                secondaryAlert.image = NSImage.init(imageLiteralResourceName: NSImageNameStatusAvailable)
+                secondaryAlert.image = NSImage(named: NSImage.Name.statusAvailable)
             } else {
-                secondaryAlert.image = NSImage.init(imageLiteralResourceName: NSImageNameStatusUnavailable)
+                secondaryAlert.image = NSImage(named: NSImage.Name.statusUnavailable)
             }
         case newPasswordAgain :
             let result = policy?.checkPassword(pass: newPassword.stringValue, username: defaults.string(forKey: Preferences.userShortName)!)
             if result == "" {
                 popText.stringValue = "All required policies met."
-                policyAlert.image = NSImage.init(imageLiteralResourceName: NSImageNameStatusAvailable)
+                policyAlert.image = NSImage(named: NSImage.Name.statusAvailable)
             } else {
                 popText.stringValue = result!
-                policyAlert.image = NSImage.init(imageLiteralResourceName: NSImageNameStatusUnavailable)
+                policyAlert.image = NSImage(named: NSImage.Name.statusUnavailable)
             }
             if newPasswordAgain.stringValue == newPassword.stringValue && newPassword.stringValue != "" {
-                secondaryAlert.image = NSImage.init(imageLiteralResourceName: NSImageNameStatusAvailable)
+                secondaryAlert.image = NSImage(named: NSImage.Name.statusAvailable)
             } else {
-                secondaryAlert.image = NSImage.init(imageLiteralResourceName: NSImageNameStatusUnavailable)
+                secondaryAlert.image = NSImage(named: NSImage.Name.statusUnavailable)
             }
         default:
             break
         }
         
-        if secondaryAlert.image == NSImage.init(imageLiteralResourceName: NSImageNameStatusAvailable) && policyAlert.image == NSImage.init(imageLiteralResourceName: NSImageNameStatusAvailable) {
+        if secondaryAlert.image == NSImage(named: NSImage.Name.statusAvailable) && policyAlert.image == NSImage(named: NSImage.Name.statusAvailable) {
             passwordChangeButton.isEnabled = true
         } else {
             passwordChangeButton.isEnabled = false

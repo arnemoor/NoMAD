@@ -76,7 +76,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         refreshTimer?.invalidate()
     }
 
-    func sendUpdateMessage() {
+    @objc func sendUpdateMessage() {
         myLogger.logit(.base, message: "It's been a while, checking things.")
         NotificationQueue.default.enqueue(updateNotification, postingStyle: .now)
     }

@@ -20,12 +20,12 @@ import Cocoa
 }
 
 class NoMADApplication: NSApplication {
-    fileprivate let commandKey = NSEventModifierFlags.command.rawValue
-    fileprivate let commandShiftKey = NSEventModifierFlags.command.rawValue | NSEventModifierFlags.shift.rawValue
+    fileprivate let commandKey = NSEvent.ModifierFlags.command.rawValue
+    fileprivate let commandShiftKey = NSEvent.ModifierFlags.command.rawValue | NSEvent.ModifierFlags.shift.rawValue
 
     override func sendEvent(_ event: NSEvent) {
-        if event.type == NSEventType.keyDown {
-            if (event.modifierFlags.rawValue & NSEventModifierFlags.deviceIndependentFlagsMask.rawValue == commandKey) {
+        if event.type == NSEvent.EventType.keyDown {
+            if (event.modifierFlags.rawValue & NSEvent.ModifierFlags.deviceIndependentFlagsMask.rawValue == commandKey) {
                 if let chars = event.charactersIgnoringModifiers {
                     switch chars.lowercased() {
                 case "x":
@@ -47,7 +47,7 @@ class NoMADApplication: NSApplication {
                     }
                 }
             }
-            else if (event.modifierFlags.rawValue & NSEventModifierFlags.deviceIndependentFlagsMask.rawValue == commandShiftKey) {
+            else if (event.modifierFlags.rawValue & NSEvent.ModifierFlags.deviceIndependentFlagsMask.rawValue == commandShiftKey) {
                 if let chars = event.charactersIgnoringModifiers, chars == "z" {
                     if NSApp.sendAction(#selector(RedoActionRespondable.redo(_:)), to:nil, from:self) { return }
                 }

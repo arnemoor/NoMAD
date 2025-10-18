@@ -30,8 +30,8 @@ class KeychainMinder : NSWindowController, NSWindowDelegate {
 
     // overrides
 
-    override var windowNibName: String? {
-        return "KeychainMinder"
+    override var windowNibName: NSNib.Name? {
+        return NSNib.Name("KeychainMinder")
     }
 
     override func windowDidLoad() {
