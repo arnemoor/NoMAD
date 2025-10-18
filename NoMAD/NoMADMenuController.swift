@@ -964,6 +964,22 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         }
     }
 
+    // Explicit click handler for the status item button. This ensures the menu is shown
+    // on click across macOS versions including macOS 26 where setting `statusItem.menu`
+    // may prevent clicks from being delivered to the process.
+    @objc func statusItemClicked(_ sender: Any?) {
+        // If the menu is already open, close it by cancelTracking
+        if let event = NSApp.currentEvent, event.type == .rightMouseUp {
+            // Right click: show contextual menu
+            statusItem.popUpMenu(NoMADMenu)
+            return
+        }
+
+        // Left click: show the main menu
+        // Ensure the app is activated to allow windows to appear above other apps
+        NSApp.activate(ignoringOtherApps: true)
+        statusItem.popUpMenu(NoMADMenu)
+    }
 
     func handleAppleEvent(_ event: NSAppleEventDescriptor, withReplyEvent: NSAppleEventDescriptor) {
         let fullCommand = URL(string: (event.paramDescriptor(forKeyword: keyDirectObject)?.stringValue)!)

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xcodebuild -version)",
+      "Bash(swift --version)",
+      "Bash(xcodebuild -project NoMAD.xcodeproj -scheme NoMAD -configuration Debug -showBuildSettings)",
+      "Bash(xcodebuild -project NoMAD.xcodeproj -scheme NoMAD -configuration Debug clean build)",
+      "Bash(xcodebuild -project NoMAD.xcodeproj -scheme NoMAD -configuration Debug build)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
