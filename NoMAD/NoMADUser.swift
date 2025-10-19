@@ -182,7 +182,7 @@ class NoMADUser {
         })
 
         while ( !GetCredentials.finished ) {
-            RunLoop.current.run(mode: RunLoopMode.defaultRunLoopMode, before: Date.distantFuture)
+            RunLoop.current.run(mode: .default, before: Date.distantFuture)
         }
 
         return myError

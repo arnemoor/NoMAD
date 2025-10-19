@@ -126,7 +126,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         while myKeychainutil.checkLockedKeychain() && defaults.bool(forKey: Preferences.lockedKeychainCheck) {
             // pause until Keychain is fixed
             myLogger.logit(.base, message: "Waiting for keychain to unlock.")
-            RunLoop.current.run(mode: RunLoopMode.defaultRunLoopMode, before: Date.distantFuture)
+            RunLoop.current.run(mode: .default, before: Date.distantFuture)
         }
 
         // AppleEvents
@@ -292,7 +292,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         // wait for any updates to finish
 
         //while updateRunning {
-        //RunLoop.current.run(mode: RunLoopMode.defaultRunLoopMode, before: Date.distantFuture)
+        //RunLoop.current.run(mode: .default, before: Date.distantFuture)
         //}
 
         // configure Chrome
@@ -351,7 +351,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             myErr = myKerbUtil.getKerbCredentials(myPass, userPrinc)
 
             while ( !myKerbUtil.finished ) {
-                RunLoop.current.run(mode: RunLoopMode.defaultRunLoopMode, before: Date.distantFuture)
+                RunLoop.current.run(mode: .default, before: Date.distantFuture)
             }
 
             if myErr == nil {
@@ -459,7 +459,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
         //  cliTask("/System/Library/CoreServices/Menu\\ Extras/User.menu/Contents/Resources/CGSession -suspend")
         let registry: io_registry_entry_t = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler")
-        let _ = IORegistryEntrySetCFProperty(registry, "IORequestIdle" as CFString!, true as CFTypeRef!)
+        let _ = IORegistryEntrySetCFProperty(registry, "IORequestIdle" as CFString, true as CFTypeRef)
         IOObjectRelease(registry)
 
     }
@@ -599,7 +599,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
                 )})
 
             while caTestWait {
-                RunLoop.current.run(mode: RunLoopMode.defaultRunLoopMode, before: Date.distantFuture)
+                RunLoop.current.run(mode: .default, before: Date.distantFuture)
                 myLogger.logit(.debug, message: "Waiting for CA test to complete.")
             }
 
@@ -672,7 +672,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
     }
 
     // this will update the menu when it's clicked
-    override func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+    @objc func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
         // Makes all NoMAD windows come to top
         // NSApp.activateIgnoringOtherApps(true)
 
@@ -875,7 +875,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             myErr = myKerbUtil.getKerbCredentials(myPass, userPrinc)
 
             while ( !myKerbUtil.finished ) {
-                RunLoop.current.run(mode: RunLoopMode.defaultRunLoopMode, before: Date.distantFuture)
+                RunLoop.current.run(mode: .default, before: Date.distantFuture)
             }
 
             if myErr == nil {
@@ -1034,7 +1034,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         if !menuAnimated {
             menuAnimationTimer = Timer(timeInterval: 0.5, target: self, selector: #selector(animateMenuItem), userInfo: nil, repeats: true)
             //statusItem.menu = NSMenu()
-            RunLoop.main.add(menuAnimationTimer, forMode: RunLoopMode.defaultRunLoopMode)
+            RunLoop.main.add(menuAnimationTimer, forMode: .default)
             menuAnimationTimer.fire()
             menuAnimated = true
         }
@@ -1156,7 +1156,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         })
 
         while !reachCheck && (abs(reachCheckDate.timeIntervalSinceNow) < 5) {
-            RunLoop.main.run(mode: RunLoopMode.defaultRunLoopMode, before: Date.distantFuture)
+            RunLoop.main.run(mode: .default, before: Date.distantFuture)
             myLogger.logit(.debug, message: "Waiting for reachability check to return.")
             myLogger.logit(.debug, message: "Counting... " + String(abs(reachCheckDate.timeIntervalSinceNow)))
         }
@@ -1448,7 +1448,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             
             if ( !updateScheduled ) {
                 //delayTimer = Timer(timeInterval: 3.0, target: self, selector: #selector(updateUserInfo), userInfo: nil, repeats: false)
-                //RunLoop.main.add(delayTimer, forMode: RunLoopMode.defaultRunLoopMode)
+                //RunLoop.main.add(delayTimer, forMode: .default)
                 //delayTimer.fire()
                 Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(updateUserInfo), userInfo: nil, repeats: false)
                 

@@ -99,16 +99,16 @@ class ShareMounter {
         var requestID: AsyncRequestID? = nil
         let queue = DispatchQueue.main
 
-        NetFSMountURLAsync(shareAddress as CFURL!,
+        NetFSMountURLAsync(shareAddress as CFURL,
                            nil,
-                           defaults.string(forKey: Preferences.userPrincipal)! as CFString!,
+                           defaults.string(forKey: Preferences.userPrincipal)! as CFString,
                            nil,
                            nil,
                            mount_options,
                            &requestID,
                            queue)
         {(stat:Int32, requestID:AsyncRequestID?, mountpoints:CFArray?) -> Void in
-            myLogger.logit(.base, message: "Mounted \(mountpoints)")
+            myLogger.logit(.base, message: "Mounted \(String(describing: mountpoints))")
         }
 
 

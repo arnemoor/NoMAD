@@ -587,7 +587,7 @@ class LDAPServers : NSObject, DNSResolverDelegate {
         self.resolver.startQuery()
 
         while ( !self.resolver.finished ) {
-            RunLoop.current.run(mode: RunLoopMode.defaultRunLoopMode, before: Date.distantFuture)
+            RunLoop.current.run(mode: .default, before: Date.distantFuture)
         }
         if (self.resolver.error == nil) {
             myLogger.logit(.debug, message: "Did Receive Query Result: " + self.resolver.queryResults.description)
@@ -615,7 +615,7 @@ class LDAPServers : NSObject, DNSResolverDelegate {
         self.resolver.startQuery()
 
         while ( !self.resolver.finished ) {
-            RunLoop.current.run(mode: RunLoopMode.defaultRunLoopMode, before: Date.distantFuture)
+            RunLoop.current.run(mode: .default, before: Date.distantFuture)
         }
 
         if (self.resolver.error == nil) {
@@ -651,7 +651,7 @@ class LDAPServers : NSObject, DNSResolverDelegate {
         self.resolver.startQuery()
 
         while ( !self.resolver.finished ) {
-            RunLoop.current.run(mode: RunLoopMode.defaultRunLoopMode, before: Date.distantFuture)
+            RunLoop.current.run(mode: .default, before: Date.distantFuture)
             myLogger.logit(.debug, message: "Waiting for DNS query to return.")
         }
 
