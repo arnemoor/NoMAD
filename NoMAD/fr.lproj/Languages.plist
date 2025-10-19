@@ -261,5 +261,12 @@
 		<key>comment</key>
 		<string>Password change notification ignore button</string>
 	</dict>
+	<key>NoMADMenuController-Quit</key>
+	<dict>
+		<key>value</key>
+		<string>Quitter</string>
+		<key>comment</key>
+		<string>Menu item to quit NoMAD.</string>
+	</dict>
 </dict>
 </plist>
