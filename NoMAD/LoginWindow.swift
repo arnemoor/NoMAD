@@ -95,17 +95,30 @@ class LoginWindow: NSWindowController, NSWindowDelegate {
         }
         
         //let GetCredentials: KerbUtil = KerbUtil()
-        var myError: String? = ""
         let currentPassword = Password.stringValue
-        
-        do {
-            let noMADUser = try NoMADUser(kerberosPrincipal: userNameChecked)
-            
-            // Checks if the remote users's password is correct.
-            // If it is and the current console user is not an
-            // AD account, then we'll change it.
-            
-            myError = noMADUser.checkRemoteUserPassword(password: currentPassword)
+
+        // Use async factory method to prevent UI freezing during OpenDirectory operations
+        NoMADUser.create(kerberosPrincipal: userNameChecked) { [weak self] result in
+            guard let self = self else { return }
+
+            switch result {
+            case .failure(let error):
+                // Handle NoMADUser creation errors
+                let alertController = NSAlert()
+                alertController.messageText = error.description
+                alertController.beginSheetModal(for: self.window!, completionHandler: nil)
+                myLogger.logit(.base, message: error.description)
+                self.signInSpinner.isHidden = true
+                self.signInSpinner.stopAnimation(nil)
+                self.logInButton.isEnabled = true
+                return
+
+            case .success(let noMADUser):
+                // Checks if the remote users's password is correct.
+                // If it is and the current console user is not an
+                // AD account, then we'll change it.
+
+                var myError = noMADUser.checkRemoteUserPassword(password: currentPassword)
             
             // Let's present any errors we got before we do anything else.
             // We're using guard to check if myError is the correct value
@@ -149,11 +162,17 @@ class LoginWindow: NSWindowController, NSWindowDelegate {
                 return
             }
             
-            
-            // Checks if console password is correct.
-            let consoleUserPasswordResult = noMADUser.checkCurrentConsoleUserPassword(currentPassword)
-            // Checks if keychain password is correct
-            let keychainPasswordIsCorrect = try noMADUser.checkKeychainPassword(currentPassword)
+
+                // Checks if console password is correct.
+                let consoleUserPasswordResult = noMADUser.checkCurrentConsoleUserPassword(currentPassword)
+                // Checks if keychain password is correct
+                let keychainPasswordIsCorrect: Bool
+                do {
+                    keychainPasswordIsCorrect = try noMADUser.checkKeychainPassword(currentPassword)
+                } catch {
+                    myLogger.logit(LogLevel.base, message: "Error checking keychain password: \(error)")
+                    keychainPasswordIsCorrect = false
+                }
             // Check if we want to store the password in the keychain.
             let useKeychain = defaults.bool(forKey: Preferences.useKeychain)
             // Check if we want to sync the console user's password with the remote AD password.
@@ -372,46 +391,24 @@ class LoginWindow: NSWindowController, NSWindowDelegate {
                 if consoleUserIsAD {
                     myLogger.logit(LogLevel.info, message: "Console user is AD account.")
                 }
-                self.Password.stringValue = ""
-                signInSpinner.isHidden = true
-                signInSpinner.stopAnimation(nil)
-                logInButton.isEnabled = true
-                self.close()
-            }
-        } catch let nomadUserError as NoMADUserError {
-            let alertController = NSAlert()
-            alertController.messageText = nomadUserError.description
-            alertController.beginSheetModal(for: self.window!, completionHandler: nil)
-            myLogger.logit(.base, message:myError!)
-            EXIT_FAILURE
-            self.Password.stringValue = ""
-            signInSpinner.isHidden = true
-            signInSpinner.stopAnimation(nil)
-            logInButton.isEnabled = true
-            self.close()
-        } catch {
-            let alertController = NSAlert()
-            alertController.messageText = "Unknown error."
-            alertController.beginSheetModal(for: self.window!, completionHandler: nil)
-            myLogger.logit(.base, message:myError!)
-            EXIT_FAILURE
-            self.Password.stringValue = ""
-            signInSpinner.isHidden = true
-            signInSpinner.stopAnimation(nil)
-            logInButton.isEnabled = true
-            self.close()
-        }
-        
-        // fire off the SignInCommand script if there is one
-        
-        if defaults.string(forKey: Preferences.signInCommand) != "" {
-            let myResult = cliTask(defaults.string(forKey: Preferences.signInCommand)!)
-            myLogger.logit(LogLevel.base, message: myResult)
-        }
-        
-        signInSpinner.isHidden = true
-        signInSpinner.stopAnimation(nil)
-        logInButton.isEnabled = true
+                    self.Password.stringValue = ""
+                    self.signInSpinner.isHidden = true
+                    self.signInSpinner.stopAnimation(nil)
+                    self.logInButton.isEnabled = true
+                    self.close()
+                }
+
+                // fire off the SignInCommand script if there is one
+                if defaults.string(forKey: Preferences.signInCommand) != "" {
+                    let myResult = cliTask(defaults.string(forKey: Preferences.signInCommand)!)
+                    myLogger.logit(LogLevel.base, message: myResult)
+                }
+
+                self.signInSpinner.isHidden = true
+                self.signInSpinner.stopAnimation(nil)
+                self.logInButton.isEnabled = true
+            } // End of NoMADUser.create completion handler
+        } // End of NoMADUser.create call
         
         // DO NOT put self.close() here to try to save code,
         // it will mess up the local password sync code.

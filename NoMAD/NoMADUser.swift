@@ -44,7 +44,13 @@ class NoMADUser {
     static let uid: String = String(getuid())
     fileprivate let currentConsoleUserRecord: ODRecord
 
-    init(kerberosPrincipal: String) throws {
+    // Cached values from OpenDirectory to prevent UI blocking when accessed
+    private let cachedIsADUser: Bool
+    private let cachedAuthenticationAuthority: String?
+    private let cachedOriginalAuthenticationAuthority: String?
+
+    // Private init - use factory method instead
+    private init(kerberosPrincipal: String, currentConsoleUserRecord: ODRecord) throws {
         self.kerberosPrincipal = kerberosPrincipal
         let kerberosPrincipalArray = kerberosPrincipal.components(separatedBy: "@")
         guard kerberosPrincipalArray.count == 2 else {
@@ -53,56 +59,95 @@ class NoMADUser {
         }
         userName = kerberosPrincipalArray[0]
         realm = kerberosPrincipalArray[1]
+        self.currentConsoleUserRecord = currentConsoleUserRecord
+        clearLibDefaults = false
+
+        // Cache OpenDirectory attribute reads to prevent UI blocking later
+        // These slow operations happen once during init on background queue
+        var isADUser = false
+        if let originalNodeName = try? String(describing: currentConsoleUserRecord.values(forAttribute: kODAttributeTypeOriginalNodeName)[0]) {
+            isADUser = originalNodeName.contains("/Active Directory")
+        } else if let authAuth = try? String(describing: currentConsoleUserRecord.values(forAttribute: kODAttributeTypeAuthenticationAuthority)) {
+            isADUser = authAuth.contains("NetLogon")
+        }
+        self.cachedIsADUser = isADUser
+
+        self.cachedAuthenticationAuthority = try? String(describing: currentConsoleUserRecord.values(forAttribute: kODAttributeTypeAuthenticationAuthority))
+        self.cachedOriginalAuthenticationAuthority = try? String(describing: currentConsoleUserRecord.values(forAttribute: "dsAttrTypeStandard:OriginalAuthenticationAuthority")[0])
+    }
+
+    // Synchronous factory method for backwards compatibility
+    convenience init(kerberosPrincipal: String) throws {
         guard let unwrappedCurrentConsoleUserRecord = NoMADUser.getCurrentConsoleUserRecord() else {
             myLogger.logit(LogLevel.debug, message: "Unable to get ODRecord for the current console user.")
             throw NoMADUserError.invalidResult("Unable to get ODRecord for the current console user.")
         }
-        currentConsoleUserRecord = unwrappedCurrentConsoleUserRecord
-        clearLibDefaults = false
+        try self.init(kerberosPrincipal: kerberosPrincipal, currentConsoleUserRecord: unwrappedCurrentConsoleUserRecord)
+    }
+
+    // Async factory method - prevents UI blocking
+    static func create(kerberosPrincipal: String, completion: @escaping (Result<NoMADUser, NoMADUserError>) -> Void) {
+        // Perform OpenDirectory operations on background queue to prevent UI freezing
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                guard let currentConsoleUserRecord = NoMADUser.getCurrentConsoleUserRecord() else {
+                    DispatchQueue.main.async {
+                        completion(.failure(.invalidResult("Unable to get ODRecord for the current console user.")))
+                    }
+                    return
+                }
+
+                let user = try NoMADUser(kerberosPrincipal: kerberosPrincipal, currentConsoleUserRecord: currentConsoleUserRecord)
+
+                DispatchQueue.main.async {
+                    completion(.success(user))
+                }
+            } catch let error as NoMADUserError {
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(.unknownError("Failed to create NoMADUser: \(error)")))
+                }
+            }
+        }
     }
     
     func currentConsoleUserMatchesNoMADUser() -> Bool {
         if ( userName == NoMADUser.currentConsoleUserName ) {
-            if let originalAuthenticationAuthority = try? String(describing: currentConsoleUserRecord.values(forAttribute: kODAttributeTypeAuthenticationAuthority)) {
-                if ( originalAuthenticationAuthority.contains(realm) ) {
+            if let authAuthority = cachedAuthenticationAuthority {
+                if ( authAuthority.contains(realm) ) {
                     return true
                 }
             }
         }
         return false
-        
+
     }
 
     // MARK: Read-Only Functions
     /**
      Checks if the current console user is an AD account
+     Uses cached value from initialization to prevent UI blocking
 
      - returns:
      A bool
      */
     func currentConsoleUserIsADuser() -> Bool {
-        if let originalNodeName = try? String(describing: currentConsoleUserRecord.values(forAttribute: kODAttributeTypeOriginalNodeName)[0]) {
-            if ( originalNodeName.contains("/Active Directory")) {
-                myLogger.logit(LogLevel.debug, message: "Current Console User is an AD user.")
-                return originalNodeName.contains("/Active Directory")
-            }
-        } else if let authAuthority = try? String(describing: currentConsoleUserRecord.values(forAttribute: kODAttributeTypeAuthenticationAuthority)) {
-            if authAuthority.contains("NetLogon") {
-                // network only AD account
-                myLogger.logit(.debug, message: "Network only AD account, so treating like an AD account.")
-                return true
-            }
+        if cachedIsADUser {
+            myLogger.logit(LogLevel.debug, message: "Current Console User is an AD user.")
         } else {
             myLogger.logit(LogLevel.debug, message: "Current Console User is not an AD user.")
         }
-        return false
+        return cachedIsADUser
     }
 
 
     func getCurrentConsoleUserKerberosPrincipal() -> String {
         if currentConsoleUserIsADuser() {
 
-            if let originalAuthenticationAuthority = try? String(describing: currentConsoleUserRecord.values(forAttribute: "dsAttrTypeStandard:OriginalAuthenticationAuthority")[0]) {
+            if let originalAuthenticationAuthority = cachedOriginalAuthenticationAuthority {
                 let range = originalAuthenticationAuthority.range(of: "(?<=Kerberosv5;;).+@[^;]+", options:.regularExpression)
                 if let range = range {
                     return String(originalAuthenticationAuthority[range])
