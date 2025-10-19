@@ -44,7 +44,7 @@ class PreferencesWindow: NSWindowController, NSWindowDelegate {
         self.disableManagedPrefs()
     }
 
-    func windowShouldClose(_ sender: Any) -> Bool {
+    func windowShouldClose(_ sender: NSWindow) -> Bool {
 
         // Make sure we have an AD Domain. Either require the user to enter one
         // or quit.

@@ -328,7 +328,7 @@ class NoMADUser {
         }
 
         do {
-            try preflightCurrentConsoleUserPassword(newPassword1)
+            _ = try preflightCurrentConsoleUserPassword(newPassword1)
         } catch let unknownError as NSError {
             myLogger.logit(LogLevel.base, message: "New password does not meet local complexity requirements. Error: " + unknownError.description)
             return unknownError.localizedDescription
@@ -361,14 +361,13 @@ class NoMADUser {
 
         // Test if the keychain password is correct by trying to unlock it.
 
-        var oldPasswordMutable = oldPassword
-
-    err = SecKeychainUnlock(myDefaultKeychain, UInt32(oldPasswordMutable.count), &oldPasswordMutable, true)
+    err = oldPassword.withCString { passwordPtr in
+        SecKeychainUnlock(myDefaultKeychain, UInt32(oldPassword.utf8.count), passwordPtr, true)
+    }
 
         if err != noErr {
             myLogger.logit(LogLevel.base, message: "Error unlocking default keychain to sync password.")
             throw NoMADUserError.invalidResult("Error unlocking default keychain.")
-            return
         }
 
     err = SecKeychainChangePassword(myDefaultKeychain, UInt32(oldPassword.count), oldPassword, UInt32(newPassword1.count), newPassword1)
@@ -430,7 +429,7 @@ class NoMADUser {
 
         // We may have gotten multiple ODRecords that match username,
         // So make sure it also matches the UID.
-        if ( records != nil ) {
+        if !records.isEmpty {
             for case let record in records {
                 let attribute = "dsAttrTypeStandard:UniqueID"
                 if let odUid = try? String(describing: record.values(forAttribute: attribute)[0]) {
@@ -468,7 +467,7 @@ class NoMADUser {
 
             // get the list defaults, or create an empty dictionary if there are none
 
-            var kerbDefaults = kerbPrefs?.dictionary(forKey: "libdefaults") ?? [String:AnyObject]()
+            let kerbDefaults = kerbPrefs?.dictionary(forKey: "libdefaults") ?? [String:AnyObject]()
 
             // test to see if the domain_defaults key already exists, if not build it
 
@@ -507,7 +506,6 @@ class NoMADUser {
             myLogger.logit(LogLevel.base, message: "Couldn't find kpasswd server that matches current LDAP server. Letting system chose.")
             return false
         }
-        return false
     }
 }
 
@@ -577,7 +575,7 @@ func performPasswordChange(username: String, currentPassword: String, newPasswor
 
                     doLocalPasswordSync = true
                     do {
-                        try noMADUser.preflightCurrentConsoleUserPassword(newPassword1)
+                        _ = try noMADUser.preflightCurrentConsoleUserPassword(newPassword1)
                     } catch let error as NoMADUserError {
                         myLogger.logit(LogLevel.base, message: error.description)
                         return error.description
@@ -590,7 +588,7 @@ func performPasswordChange(username: String, currentPassword: String, newPasswor
 
             doLocalPasswordSync = true
             do {
-            try noMADUser.preflightCurrentConsoleUserPassword(newPassword1)
+            _ = try noMADUser.preflightCurrentConsoleUserPassword(newPassword1)
             } catch let error as NoMADUserError {
                 myLogger.logit(LogLevel.base, message: error.description)
                 return error.description
@@ -687,7 +685,7 @@ func performPasswordChange(username: String, currentPassword: String, newPasswor
         
         if useKeychain {
             do {
-                try noMADUser.updateKeychainItem(newPassword1, newPassword2: newPassword2)
+                _ = try noMADUser.updateKeychainItem(newPassword1, newPassword2: newPassword2)
             } catch let error as NoMADUserError {
                 myLogger.logit(LogLevel.base, message: error.description)
                 return error.description

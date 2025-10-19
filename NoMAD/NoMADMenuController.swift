@@ -357,7 +357,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             if myErr == nil {
                 myLogger.logit(.base, message:"Automatically logged in.")
 
-                cliTask("/usr/bin/kswitch -p " +  userPrinc)
+                _ = cliTask("/usr/bin/kswitch -p " +  userPrinc)
 
                 // fire off the SignInCommand script if there is one
                 if defaults.string(forKey: Preferences.signInCommand) != "" {
@@ -437,12 +437,12 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             //loginWindow.window!.forceToFrontAndFocus(nil)
         }
 
-        cliTask("/usr/bin/kdestroy")
+        _ = cliTask("/usr/bin/kdestroy")
 
         // fire off the SignOutCommand script if there is one
 
-        if defaults.string(forKey: Preferences.signOutCommand) != "" {
-            let myResult = cliTask(defaults.string(forKey: Preferences.signInCommand)!)
+        if let signOutCommand = defaults.string(forKey: Preferences.signOutCommand), !signOutCommand.isEmpty {
+            let myResult = cliTask(signOutCommand)
             myLogger.logit(LogLevel.base, message: myResult)
         }
         userInformation.connected = false
@@ -458,7 +458,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         return
 
         //  cliTask("/System/Library/CoreServices/Menu\\ Extras/User.menu/Contents/Resources/CGSession -suspend")
-        let registry: io_registry_entry_t = IORegistryEntryFromPath(kIOMasterPortDefault, "IOService:/IOResources/IODisplayWrangler")
+        let registry: io_registry_entry_t = IORegistryEntryFromPath(kIOMainPortDefault, "IOService:/IOResources/IODisplayWrangler")
         let _ = IORegistryEntrySetCFProperty(registry, "IORequestIdle" as CFString, true as CFTypeRef)
         IOObjectRelease(registry)
 
@@ -496,13 +496,15 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
         switch selfService {
         case .casper:
-            NSWorkspace.shared.launchApplication("/Applications/Self Service.app")
+            let appURL = URL(fileURLWithPath: "/Applications/Self Service.app")
+            NSWorkspace.shared.openApplication(at: appURL, configuration: NSWorkspace.OpenConfiguration(), completionHandler: nil)
         case .lanrev:
-            cliTask("/Library/Application\\ Support/LANrev\\ Agent/LANrev\\ Agent.app/Contents/MacOS/LANrev\\ Agent --ShowOnDemandPackages")
+            _ = cliTask("/Library/Application\\ Support/LANrev\\ Agent/LANrev\\ Agent.app/Contents/MacOS/LANrev\\ Agent --ShowOnDemandPackages")
         case .munki:
-            NSWorkspace.shared.launchApplication("/Applications/Managed Software Center.app")
+            let appURL = URL(fileURLWithPath: "/Applications/Managed Software Center.app")
+            NSWorkspace.shared.openApplication(at: appURL, configuration: NSWorkspace.OpenConfiguration(), completionHandler: nil)
         case .custom:
-            cliTask("/usr/bin/open " + defaults.string(forKey: Preferences.selfServicePath)!)
+            _ = cliTask("/usr/bin/open " + defaults.string(forKey: Preferences.selfServicePath)!)
         }
     }
 
@@ -614,7 +616,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             } else {
 
                 let certCARequest = WindowsCATools(serverURL: certCATest, template: certTemplateTest)
-                certCARequest.certEnrollment()
+                _ = certCARequest.certEnrollment()
             }
 
         } else {
@@ -632,7 +634,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
     // connect to the Home share if it's available
     @IBAction func homeClicked(_ send: AnyObject) {
         // TODO: I think NSWorkspace can do this...
-        cliTask("open smb:" + defaults.string(forKey: Preferences.userHome)!)
+        _ = cliTask("open smb:" + defaults.string(forKey: Preferences.userHome)!)
     }
 
     // send copious logs to the console
@@ -696,10 +698,8 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             if (self.NoMADMenuGetCertificate != nil)  {
                 self.NoMADMenuGetCertificate.isEnabled = false
             }
-            
-            if (self.PKINITMenuItem != nil ) {
-                self.PKINITMenuItem.isEnabled = false
-            }
+
+            self.PKINITMenuItem.isEnabled = false
 
             // twiddles what needs to be twiddled for connected but not logged in
 
@@ -718,9 +718,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             if (self.NoMADMenuGetCertificate != nil)  {
                 self.NoMADMenuGetCertificate.isEnabled = false
             }
-            if (self.PKINITMenuItem != nil ) {
-                self.PKINITMenuItem.isEnabled = true
-            }
+            self.PKINITMenuItem.isEnabled = true
         }
         else {
             if defaults.bool(forKey: Preferences.hideRenew) {
@@ -740,9 +738,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             if (self.NoMADMenuGetCertificate != nil)  {
                 self.NoMADMenuGetCertificate.isEnabled = true
             }
-            if (self.PKINITMenuItem != nil ) {
-                self.PKINITMenuItem.isEnabled = true
-            }
+            self.PKINITMenuItem.isEnabled = true
         }
 
         if defaults.bool(forKey: Preferences.hidePrefs) {
@@ -790,7 +786,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         } else if notification.actionButtonTitle == "SignIn".translate {
             myLogger.logit(.base, message: "Initiating unannounced password change recovery.")
             // kill the tickets and show the loginwindow
-            cliTask("/usr/bin/kdestroy")
+            _ = cliTask("/usr/bin/kdestroy")
 
             // fire off the SignOutCommand script if there is one
 
@@ -825,7 +821,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
     // simple function to renew tickets
     @objc func renewTickets(){
-        cliTask("/usr/bin/kinit -R")
+        _ = cliTask("/usr/bin/kinit -R")
         userInformation.myLDAPServers.tickets.getDetails()
         if defaults.bool(forKey: Preferences.verbose) == true {
             myLogger.logit(.base, message:"Renewing tickets.")
@@ -833,10 +829,10 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
     }
 
     @objc func animateMenuItem() {
-        if statusItem.image == iconOnOn {
-            statusItem.image = iconOffOff
+        if statusItem.button?.image == iconOnOn {
+            statusItem.button?.image = iconOffOff
         } else {
-            statusItem.image = iconOnOn
+            statusItem.button?.image = iconOnOn
         }
     }
 
@@ -881,7 +877,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             if myErr == nil {
                 myLogger.logit(.base, message:"Automatically logged in.")
 
-                cliTask("/usr/bin/kswitch -p " +  userPrinc)
+                _ = cliTask("/usr/bin/kswitch -p " +  userPrinc)
 
                 // update the UI
 
@@ -955,11 +951,11 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             }
         }
         if self.userInformation.status == "Connected" {
-            self.statusItem.image = self.iconOnOff
+            self.statusItem.button?.image = self.iconOnOff
         } else if self.userInformation.status == "Logged In" && self.userInformation.myLDAPServers.tickets.state {
-            self.statusItem.image = self.iconOnOn
+            self.statusItem.button?.image = self.iconOnOn
         } else {
-            self.statusItem.image = self.iconOffOff
+            self.statusItem.button?.image = self.iconOffOff
         }
     }
 
@@ -1049,11 +1045,11 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
         // now set it rights
         if self.userInformation.status == "Connected" {
-            self.statusItem.image = self.iconOnOff
+            self.statusItem.button?.image = self.iconOnOff
         } else if self.userInformation.status == "Logged In" && self.userInformation.myLDAPServers.tickets.state {
-            self.statusItem.image = self.iconOnOn
+            self.statusItem.button?.image = self.iconOnOn
         } else {
-            self.statusItem.image = self.iconOffOff
+            self.statusItem.button?.image = self.iconOffOff
         }
     }
 
@@ -1190,7 +1186,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
                     // set the menu icon
                     if self.userInformation.status == "Connected" {
-                        self.statusItem.image = self.iconOnOff
+                        self.statusItem.button?.image = self.iconOnOff
                         // we do this twice b/c doing it only once seems to make it less than full width
                         self.statusItem.title = self.userInformation.status.translate
                         self.statusItem.title = self.userInformation.status.translate

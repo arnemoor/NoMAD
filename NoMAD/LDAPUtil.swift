@@ -414,7 +414,7 @@ class LDAPServers : NSObject, DNSResolverDelegate {
                 continue
             }
 
-            var attribute = ldifLines[lineIndex].split(separator: ":", maxSplits: 1, omittingEmptySubsequences: false).map(String.init)
+            let attribute = ldifLines[lineIndex].split(separator: ":", maxSplits: 1, omittingEmptySubsequences: false).map(String.init)
             if attribute.count == 2 {
 
                 // Get the attribute name (before ;),
@@ -757,8 +757,8 @@ class LDAPServers : NSObject, DNSResolverDelegate {
         myLogger.logit(.debug, message: "Did Recieve Query Result: " + queryResult.description);
     }
     
-    func dnsResolver(_ resolver: DNSResolver!, didStopQueryWithError error: NSError!) {
-        myLogger.logit(.debug, message: "Did Recieve Query Result: " + error.description);
+    func dnsResolver(_ resolver: DNSResolver!, didStopQueryWithError error: Error!) {
+        myLogger.logit(.debug, message: "Did Recieve Query Result: " + error.localizedDescription);
     }
     
 }

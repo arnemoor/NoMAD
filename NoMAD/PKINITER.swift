@@ -37,14 +37,15 @@ func launchPKINITer() {
         let bundlePath = Bundle.main.resourcePath
 
         // build the options
-    let configArgs = [NSWorkspace.LaunchConfigurationKey.arguments : ["-nomad", "-n", defaults.string(forKey: Preferences.userPrincipal)]]
+    let configuration = NSWorkspace.OpenConfiguration()
+    configuration.arguments = ["-nomad", "-n", defaults.string(forKey: Preferences.userPrincipal)!]
+    configuration.activates = false
     let pkinitPathURL = URL(fileURLWithPath: bundlePath! + "/PKINITer.app")
 
-    do {
-    try NSWorkspace.shared.launchApplication(at: pkinitPathURL, options: NSWorkspace.LaunchOptions.withoutAddingToRecents, configuration: configArgs)
-    } catch {
-    // handle the error here
-    myLogger.logit(.base, message: "Unable to launch PKINITer.")
+    NSWorkspace.shared.openApplication(at: pkinitPathURL, configuration: configuration) { (app, error) in
+        if let error = error {
+            myLogger.logit(.base, message: "Unable to launch PKINITer: \(error)")
+        }
     }
     
 }

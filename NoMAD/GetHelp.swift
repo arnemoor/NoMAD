@@ -24,9 +24,9 @@ class GetHelp {
                 case "Bomgar":
                     if let myURL = subVariables(getHelpOptions) {
                         OperationQueue.main.addOperation() {
-                            cliTask("curl -o /tmp/BomgarClient " + myURL )
-                            cliTaskNoTerm("/usr/bin/unzip -o -d /tmp /tmp/BomgarClient")
-                            cliTask("/usr/bin/open /tmp/Bomgar/Double-Click\\ To\\ Start\\ Support\\ Session.app")
+                            _ = cliTask("curl -o /tmp/BomgarClient " + myURL )
+                            _ = cliTaskNoTerm("/usr/bin/unzip -o -d /tmp /tmp/BomgarClient")
+                            _ = cliTask("/usr/bin/open /tmp/Bomgar/Double-Click\\ To\\ Start\\ Support\\ Session.app")
                         }
                     }
                 case "URL":
@@ -36,9 +36,11 @@ class GetHelp {
                         }
                         NSWorkspace.shared.open(url)
                 case "Path":
-                    cliTask(getHelpOptions.replacingOccurrences(of: " ", with: "\\ "))
+                    _ = cliTask(getHelpOptions.replacingOccurrences(of: " ", with: "\\ "))
                 case "App":
-                        NSWorkspace.shared.launchApplication(getHelpOptions)
+                    if let appURL = URL(fileURLWithPath: getHelpOptions) as URL? {
+                        NSWorkspace.shared.openApplication(at: appURL, configuration: NSWorkspace.OpenConfiguration(), completionHandler: nil)
+                    }
                 default:
                     myLogger.logit(.info, message: "Invalid getHelpType or getHelpOptions, defaulting to www.apple.com/support")
                     openDefaultHelpURL()

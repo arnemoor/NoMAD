@@ -110,7 +110,7 @@ class KlistUtil {
                 if principal.contains("$@") {
                     myLogger.logit(.base, message: "Found kerberos ticket for machine account. Removing.")
                     // kill it with fire
-                    cliTask("/usr/bin/kdestroy")
+                    _ = cliTask("/usr/bin/kdestroy")
                     getDetails()
                 }
 

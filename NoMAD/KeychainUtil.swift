@@ -56,7 +56,7 @@ class KeychainUtil {
 
     func updatePassword(_ name: String, pass: String) -> Bool {
         if (try? findPassword(name)) != nil {
-            deletePassword()
+            _ = deletePassword()
         }
         myErr = setPassword(name, pass: pass)
         if myErr == OSStatus(errSecSuccess) {
@@ -105,7 +105,7 @@ class KeychainUtil {
 
     func findAndDelete(_ name: String) -> Bool {
         do {
-            try findPassword(name)
+            _ = try findPassword(name)
         } catch{
             return false
         }

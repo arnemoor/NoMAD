@@ -257,7 +257,7 @@ class LoginWindow: NSWindowController, NSWindowDelegate {
             
             // make sure the just logged in user is the current user and then reset the password warning
             // TODO: @mactroll - why is this 1296000?
-            cliTask("/usr/bin/kswitch -p " + userNameChecked )
+            _ = cliTask("/usr/bin/kswitch -p " + userNameChecked )
             defaults.set(1296000, forKey: Preferences.lastPasswordWarning)
             
             if ( useKeychain ) {

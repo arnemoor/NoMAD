@@ -219,8 +219,8 @@ class UserInformation {
                     // need to go old skool
                     var passwordExpirationLength: String
                     let attribute = "maxPwdAge"
-                    
-                    if defaults.integer(forKey: Preferences.passwordExpirationDays) != nil {
+
+                    if defaults.object(forKey: Preferences.passwordExpirationDays) != nil {
                         passwordExpirationLength = String(describing: defaults.integer(forKey: Preferences.passwordExpirationDays))
                     } else {
 
@@ -288,7 +288,7 @@ class UserInformation {
                         
                     if (defaults.string(forKey: Preferences.uPCAlertAction) != nil ) {
                         myLogger.logit(.base, message: "Firing UPC Alert Action")
-                        cliTask(defaults.string(forKey: Preferences.uPCAlertAction)! + " &")
+                        _ = cliTask(defaults.string(forKey: Preferences.uPCAlertAction)! + " &")
                     }
 
                     // record the new password set date

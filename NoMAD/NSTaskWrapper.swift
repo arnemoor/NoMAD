@@ -146,7 +146,7 @@ public func getConsoleUser() -> String {
 
 public func getSerial() -> String {
 
-    let platformExpert = IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOPlatformExpertDevice"))
+    let platformExpert = IOServiceGetMatchingService(kIOMainPortDefault, IOServiceMatching("IOPlatformExpertDevice"))
     guard platformExpert != 0,
         let platformSerialNumberKey: CFString = kIOPlatformSerialNumberKey as CFString? else
     {
