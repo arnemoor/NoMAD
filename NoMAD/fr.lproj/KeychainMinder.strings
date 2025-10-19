@@ -1,0 +1,18 @@
+
+/* Class = "NSTextFieldCell"; title = "Network Password"; ObjectID = "N3B-RK-VVf"; */
+"N3B-RK-VVf.title" = "Mot de passe réseau";
+
+/* Class = "NSWindow"; title = "Keychain Locked"; ObjectID = "QvC-M9-y7g"; */
+"QvC-M9-y7g.title" = "Trousseau verrouillé";
+
+/* Class = "NSTextFieldCell"; title = "Your current network password does not match your Keychain password. Please enter your old password and your current network password to correct this."; ObjectID = "ZX9-VK-2YO"; */
+"ZX9-VK-2YO.title" = "Votre mot de passe réseau actuel ne correspond pas à votre mot de passe Trousseau. Veuillez entrer votre ancien mot de passe et votre mot de passe réseau actuel pour corriger cela.";
+
+/* Class = "NSButtonCell"; title = "New Keychain"; ObjectID = "fGe-Fd-Ltb"; */
+"fGe-Fd-Ltb.title" = "Nouveau Trousseau";
+
+/* Class = "NSButtonCell"; title = "Change"; ObjectID = "fO5-rG-FqV"; */
+"fO5-rG-FqV.title" = "Modifier";
+
+/* Class = "NSTextFieldCell"; title = "Old Password"; ObjectID = "pCL-Yt-KFX"; */
+"pCL-Yt-KFX.title" = "Ancien mot de passe";

@@ -1,0 +1,18 @@
+
+/* Class = "NSTextFieldCell"; title = "Network Password"; ObjectID = "N3B-RK-VVf"; */
+"N3B-RK-VVf.title" = "Nätverkslösenord";
+
+/* Class = "NSWindow"; title = "Keychain Locked"; ObjectID = "QvC-M9-y7g"; */
+"QvC-M9-y7g.title" = "Nyckelring låst";
+
+/* Class = "NSTextFieldCell"; title = "Your current network password does not match your Keychain password. Please enter your old password and your current network password to correct this."; ObjectID = "ZX9-VK-2YO"; */
+"ZX9-VK-2YO.title" = "Ditt nuvarande nätverkslösenord matchar inte ditt Nyckelring-lösenord. Ange ditt gamla lösenord och ditt nuvarande nätverkslösenord för att korrigera detta.";
+
+/* Class = "NSButtonCell"; title = "New Keychain"; ObjectID = "fGe-Fd-Ltb"; */
+"fGe-Fd-Ltb.title" = "Ny Nyckelring";
+
+/* Class = "NSButtonCell"; title = "Change"; ObjectID = "fO5-rG-FqV"; */
+"fO5-rG-FqV.title" = "Ändra";
+
+/* Class = "NSTextFieldCell"; title = "Old Password"; ObjectID = "pCL-Yt-KFX"; */
+"pCL-Yt-KFX.title" = "Gammalt lösenord";

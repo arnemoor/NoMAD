@@ -1,0 +1,18 @@
+
+/* Class = "NSTextFieldCell"; title = "Network Password"; ObjectID = "N3B-RK-VVf"; */
+"N3B-RK-VVf.title" = "Hasło sieciowe";
+
+/* Class = "NSWindow"; title = "Keychain Locked"; ObjectID = "QvC-M9-y7g"; */
+"QvC-M9-y7g.title" = "Pęk kluczy zablokowany";
+
+/* Class = "NSTextFieldCell"; title = "Your current network password does not match your Keychain password. Please enter your old password and your current network password to correct this."; ObjectID = "ZX9-VK-2YO"; */
+"ZX9-VK-2YO.title" = "Twoje bieżące hasło sieciowe nie pasuje do hasła Pęku kluczy. Wprowadź swoje stare hasło i bieżące hasło sieciowe, aby to naprawić.";
+
+/* Class = "NSButtonCell"; title = "New Keychain"; ObjectID = "fGe-Fd-Ltb"; */
+"fGe-Fd-Ltb.title" = "Nowy Pęk kluczy";
+
+/* Class = "NSButtonCell"; title = "Change"; ObjectID = "fO5-rG-FqV"; */
+"fO5-rG-FqV.title" = "Zmień";
+
+/* Class = "NSTextFieldCell"; title = "Old Password"; ObjectID = "pCL-Yt-KFX"; */
+"pCL-Yt-KFX.title" = "Stare hasło";
