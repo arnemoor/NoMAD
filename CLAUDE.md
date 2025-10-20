@@ -102,6 +102,23 @@ xcodebuild test -project NoMAD.xcodeproj -scheme NoMAD
 - **Code Signing**: Requires developer certificate for distribution
 - **LSUIElement**: true (menu bar app, no dock icon)
 
+### Build Number Versioning
+
+**Important**: The build number (CFBundleVersion) is automatically set to the git commit count via pre-build scripts in both the NoMAD and NoMAD-Release schemes.
+
+- **CURRENT_PROJECT_VERSION** in project.pbxproj is set to `1` (fallback only, not used during normal builds)
+- **Pre-build script** runs before each build: `git rev-list HEAD | wc -l`
+- **Post-build script** resets Info.plist to "DEVELOPMENT" to avoid git changes
+- **Result**: Each build gets the current git commit count as its build number (currently 690)
+
+**Why git commit count?**
+- Auto-increments with each commit (no manual updates needed)
+- Provides traceability back to source code
+- Unique build number for each commit in history
+- Standard practice for automated builds
+
+**For releases**: The build number in the packaged .app will match the commit count at build time.
+
 ## Common Development Tasks
 
 ### Adding New Menu Items

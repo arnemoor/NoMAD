@@ -34,20 +34,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             myLogger.logit(.base, message: "State change, checking things.")
             NotificationQueue.default.enqueue(updateNotification, postingStyle: .now)
 
-            if #available(OSX 10.12, *) {
-                Timer.scheduledTimer(withTimeInterval: 5, repeats: false, block: {_ in
-                    myLogger.logit(.base, message: "State change, checking things again.")
-                    NotificationQueue.default.enqueue(updateNotification, postingStyle: .now)
-                })
-            } else {
-                // wait a few seconds
-                let now = Date()
-                while abs(now.timeIntervalSinceNow) < 5 {
-                    RunLoop.current.run(mode: .default, before: Date.distantFuture)
-                }
+            Timer.scheduledTimer(withTimeInterval: 5, repeats: false, block: {_ in
                 myLogger.logit(.base, message: "State change, checking things again.")
                 NotificationQueue.default.enqueue(updateNotification, postingStyle: .now)
-            }
+            })
 
             if (defaults.string(forKey: Preferences.stateChangeAction) != "" ) {
                 myLogger.logit(.base, message: "Firing State Change Action")
@@ -62,8 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             let keysArray = ["State:/Network/Global/IPv4" as CFString, "State:/Network/Global/IPv6"] as CFArray
             SCDynamicStoreSetNotificationKeys(dynamicStore, nil, keysArray)
             let loop = SCDynamicStoreCreateRunLoopSource(kCFAllocatorDefault, dynamicStore, 0)
-            CFRunLoopAddSource(CFRunLoopGetCurrent(), loop, .defaultMode)
-            CFRunLoopRun()
+            CFRunLoopAddSource(CFRunLoopGetMain(), loop, .commonModes)
         }
 
         scheduleTimer()
@@ -83,19 +72,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     /// Schedule our update notification to fire every 15 minutes or so.
     func scheduleTimer() {
-        if #available(OSX 10.12, *) {
-            refreshActivity = NSBackgroundActivityScheduler(identifier: "com.trusourcelabs.updatecheck")
-            refreshActivity?.repeats = true
-            refreshActivity?.interval = 15 * 60
-            refreshActivity?.tolerance = 1.5 * 60
+        refreshActivity = NSBackgroundActivityScheduler(identifier: "com.trusourcelabs.updatecheck")
+        refreshActivity?.repeats = true
+        refreshActivity?.interval = 15 * 60
+        refreshActivity?.tolerance = 1.5 * 60
 
-            refreshActivity?.schedule() { (completionHandler) in
-                self.sendUpdateMessage()
-                completionHandler(NSBackgroundActivityScheduler.Result.finished)
-            }
-        } else {
-            refreshTimer = Timer.scheduledTimer(timeInterval: 15 * 60, target: self, selector: #selector(sendUpdateMessage), userInfo: nil, repeats: true)
-            refreshTimer?.tolerance = 1.5 * 60
+        refreshActivity?.schedule() { (completionHandler) in
+            self.sendUpdateMessage()
+            completionHandler(NSBackgroundActivityScheduler.Result.finished)
         }
     }
 }
