@@ -48,7 +48,7 @@ class NoMADApplication: NSApplication {
                 }
             }
             else if (event.modifierFlags.rawValue & NSEvent.ModifierFlags.deviceIndependentFlagsMask.rawValue == commandShiftKey) {
-                if let chars = event.charactersIgnoringModifiers, chars == "z" {
+                if let chars = event.charactersIgnoringModifiers, chars.lowercased() == "z" {
                     if NSApp.sendAction(#selector(RedoActionRespondable.redo(_:)), to:nil, from:self) { return }
                 }
             }
@@ -57,5 +57,4 @@ class NoMADApplication: NSApplication {
     }
 
 }
-
 
