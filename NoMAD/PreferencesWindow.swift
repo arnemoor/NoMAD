@@ -28,11 +28,21 @@ class PreferencesWindow: NSWindowController, NSWindowDelegate {
     @IBOutlet weak var HotKeyField: NSTextField!
     @IBOutlet weak var CommandField: NSTextField!
     @IBOutlet weak var SecondsToRenew: NSTextField!
+    
+    // Local Password Sync text fields
+    @IBOutlet weak var LocalPasswordSyncDontSyncLocalUsersField: NSTextField!
+    @IBOutlet weak var LocalPasswordSyncDontSyncNetworkUsersField: NSTextField!
 
     // Check boxes
     @IBOutlet weak var UseKeychain: NSButton!
     @IBOutlet weak var RenewTickets: NSButton!
     @IBOutlet weak var ShowHome: NSButton!
+    
+    // Local Password Sync options
+    @IBOutlet weak var LocalPasswordSync: NSButton!
+    @IBOutlet weak var LocalPasswordSyncOnMatchOnly: NSButton!
+    @IBOutlet weak var LocalPasswordSyncDontSyncLocalUsers: NSButton!
+    @IBOutlet weak var LocalPasswordSyncDontSyncNetworkUsers: NSButton!
 
     override var windowNibName: NSNib.Name? {
         return NSNib.Name("PreferencesWindow")
@@ -41,6 +51,13 @@ class PreferencesWindow: NSWindowController, NSWindowDelegate {
     override func windowDidLoad() {
         super.windowDidLoad()
         self.window?.center()
+        
+        // Set default values for Local Password Sync preferences if they don't exist
+        setLocalPasswordSyncDefaults()
+        
+        // Load array preferences into text fields as comma-separated strings
+        loadUserListArraysIntoTextFields()
+        
         self.disableManagedPrefs()
     }
 
@@ -64,6 +81,9 @@ class PreferencesWindow: NSWindowController, NSWindowDelegate {
     }
 
     func windowWillClose(_ notification: Notification) {
+        // Convert text fields back to arrays and save
+        convertUserListTextFieldsToArrays()
+        
         // If no Kerberos realm has been entered, assume it's the same as the AD Domain.
         if KerberosRealmField.stringValue == "" {
             defaults.set(ADDomainTextField.stringValue.uppercased(), forKey: Preferences.kerberosRealm)
@@ -159,6 +179,59 @@ class PreferencesWindow: NSWindowController, NSWindowDelegate {
         if change {
             chromeDefaults?.set(chromeAuthServerArray?.joined(separator: ","), forKey: "AuthServerWhitelist")
             chromeDefaults?.set(chromeAuthNegotiateArray?.joined(separator: ","), forKey: "AuthNegotiateDelegateWhitelist")
+        }
+    }
+    
+    // MARK: - Local Password Sync Helper Methods
+    
+    /// Set default values for Local Password Sync preferences if they don't exist
+    func setLocalPasswordSyncDefaults() {
+        // Register defaults for our new preferences
+        let localPasswordSyncDefaults: [String: Any] = [
+            Preferences.localPasswordSync: false,
+            Preferences.localPasswordSyncOnMatchOnly: false,
+            Preferences.localPasswordSyncDontSyncLocalUsers: [],
+            Preferences.localPasswordSyncDontSyncNetworkUsers: []
+        ]
+        
+        defaults.register(defaults: localPasswordSyncDefaults)
+    }
+    
+    /// Load user list arrays from preferences into text fields as comma-separated strings
+    func loadUserListArraysIntoTextFields() {
+        // Load LocalPasswordSyncDontSyncLocalUsers array into text field
+        if let localUsers = defaults.array(forKey: Preferences.localPasswordSyncDontSyncLocalUsers) as? [String] {
+            LocalPasswordSyncDontSyncLocalUsersField?.stringValue = localUsers.joined(separator: ", ")
+        }
+        
+        // Load LocalPasswordSyncDontSyncNetworkUsers array into text field  
+        if let networkUsers = defaults.array(forKey: Preferences.localPasswordSyncDontSyncNetworkUsers) as? [String] {
+            LocalPasswordSyncDontSyncNetworkUsersField?.stringValue = networkUsers.joined(separator: ", ")
+        }
+    }
+    
+    /// Convert comma-separated text fields back to arrays in preferences
+    func convertUserListTextFieldsToArrays() {
+        // Convert LocalPasswordSyncDontSyncLocalUsers text field to array
+        if let localUsersField = LocalPasswordSyncDontSyncLocalUsersField {
+            let localUsersString = localUsersField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !localUsersString.isEmpty {
+                let localUsersArray = localUsersString.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.filter { !$0.isEmpty }
+                defaults.set(localUsersArray, forKey: Preferences.localPasswordSyncDontSyncLocalUsers)
+            } else {
+                defaults.set([], forKey: Preferences.localPasswordSyncDontSyncLocalUsers)
+            }
+        }
+        
+        // Convert LocalPasswordSyncDontSyncNetworkUsers text field to array
+        if let networkUsersField = LocalPasswordSyncDontSyncNetworkUsersField {
+            let networkUsersString = networkUsersField.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !networkUsersString.isEmpty {
+                let networkUsersArray = networkUsersString.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }.filter { !$0.isEmpty }
+                defaults.set(networkUsersArray, forKey: Preferences.localPasswordSyncDontSyncNetworkUsers)
+            } else {
+                defaults.set([], forKey: Preferences.localPasswordSyncDontSyncNetworkUsers)
+            }
         }
     }
 }
