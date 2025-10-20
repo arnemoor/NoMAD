@@ -32,6 +32,10 @@ class PreferencesWindow: NSWindowController, NSWindowDelegate {
     // Local Password Sync text fields
     @IBOutlet weak var LocalPasswordSyncDontSyncLocalUsersField: NSTextField!
     @IBOutlet weak var LocalPasswordSyncDontSyncNetworkUsersField: NSTextField!
+    
+    // Help configuration fields
+    @IBOutlet weak var GetHelpTypePopUp: NSPopUpButton!
+    @IBOutlet weak var GetHelpOptionsField: NSTextField!
 
     // Check boxes
     @IBOutlet weak var UseKeychain: NSButton!
@@ -58,6 +62,9 @@ class PreferencesWindow: NSWindowController, NSWindowDelegate {
         // Load array preferences into text fields as comma-separated strings
         loadUserListArraysIntoTextFields()
         
+        // Set up help type popup
+        setupHelpTypePopUp()
+        
         self.disableManagedPrefs()
     }
 
@@ -81,6 +88,9 @@ class PreferencesWindow: NSWindowController, NSWindowDelegate {
     }
 
     func windowWillClose(_ notification: Notification) {
+        // Force any active text field to save its value
+        self.window?.makeFirstResponder(nil)
+        
         // Convert text fields back to arrays and save
         convertUserListTextFieldsToArrays()
         
@@ -195,6 +205,19 @@ class PreferencesWindow: NSWindowController, NSWindowDelegate {
         ]
         
         defaults.register(defaults: localPasswordSyncDefaults)
+        
+        // Also set up help defaults if they don't exist
+        setupHelpDefaults()
+    }
+    
+    /// Set up default help configuration
+    func setupHelpDefaults() {
+        let helpDefaults: [String: Any] = [
+            Preferences.getHelpType: "URL",
+            Preferences.getHelpOptions: "http://www.apple.com/support"
+        ]
+        
+        defaults.register(defaults: helpDefaults)
     }
     
     /// Load user list arrays from preferences into text fields as comma-separated strings
@@ -233,5 +256,54 @@ class PreferencesWindow: NSWindowController, NSWindowDelegate {
                 defaults.set([], forKey: Preferences.localPasswordSyncDontSyncNetworkUsers)
             }
         }
+    }
+    
+    // MARK: - Help Configuration Helper Methods
+    
+    /// Set up the help type popup button
+    func setupHelpTypePopUp() {
+        // Don't populate items here if using bindings - they should be set in IB
+        // But ensure we have the current value loaded
+        if GetHelpTypePopUp?.itemTitles.isEmpty == true {
+            GetHelpTypePopUp?.addItems(withTitles: ["URL", "Path", "App"])
+        }
+        
+        // Set current selection
+        let currentType = defaults.string(forKey: Preferences.getHelpType) ?? "URL"
+        GetHelpTypePopUp?.selectItem(withTitle: currentType)
+        
+        // Set current help options
+        GetHelpOptionsField?.stringValue = defaults.string(forKey: Preferences.getHelpOptions) ?? "http://www.apple.com/support"
+        
+        // Set initial placeholder
+        updateHelpOptionsPlaceholder(currentType)
+    }
+    
+    /// Update placeholder text for help options field
+    func updateHelpOptionsPlaceholder(_ selectedType: String) {
+        switch selectedType {
+        case "URL":
+            GetHelpOptionsField?.placeholderString = "https://your-company.atlassian.net/wiki/spaces/IT/pages/macOS-Support"
+        case "Path":
+            GetHelpOptionsField?.placeholderString = "/usr/bin/open /Applications/Remote Desktop.app"
+        case "App":
+            GetHelpOptionsField?.placeholderString = "/Applications/Remote Desktop.app"
+        default:
+            GetHelpOptionsField?.placeholderString = ""
+        }
+    }
+    
+    /// Handle help type popup selection change
+    @IBAction func helpTypeChanged(_ sender: NSPopUpButton) {
+        let selectedType = sender.selectedItem?.title ?? "URL"
+        defaults.set(selectedType, forKey: Preferences.getHelpType)
+        
+        // Update placeholder text
+        updateHelpOptionsPlaceholder(selectedType)
+    }
+    
+    /// Handle help options field change
+    @IBAction func helpOptionsChanged(_ sender: NSTextField) {
+        defaults.set(sender.stringValue, forKey: Preferences.getHelpOptions)
     }
 }
