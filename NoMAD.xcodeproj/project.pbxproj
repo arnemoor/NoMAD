@@ -50,7 +50,6 @@
 		84CC68051D30A25500115C76 /* NoMADMenuController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CC68041D30A25500115C76 /* NoMADMenuController.swift */; };
 		84D77F101E9C6B47001B6BDB /* HistoryAndThanks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84D77F0F1E9C6B47001B6BDB /* HistoryAndThanks.swift */; };
 		84EB75FE1ECE07BD00716B48 /* PasswordPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84EB75FD1ECE07BD00716B48 /* PasswordPolicy.swift */; };
-		84EB760D1ED3B0D100716B48 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 84EB760F1ED3B0D100716B48 /* InfoPlist.strings */; };
 		84F93A2B1D3886FA00ED2070 /* AutoConfigure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F93A2A1D3886FA00ED2070 /* AutoConfigure.swift */; };
 		BF34324D1D52844300CE8F89 /* NoMADTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF34324C1D52844300CE8F89 /* NoMADTests.swift */; };
 /* End PBXBuildFile section */
@@ -89,7 +88,6 @@
 		12BF5F272EA56817001013BE /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/KeychainMinder.strings; sourceTree = "<group>"; };
 		1A08F1F21D36DA0900FA68C4 /* NoMADApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoMADApplication.swift; sourceTree = "<group>"; };
 		1A1BA5B21F1D08B000E506D0 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
-		1A1BA5B41F1D08B100E506D0 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1A206B2C1D58312800539FA6 /* KeychainUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = KeychainUtil.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		1A24EF471D7F01B3006A1866 /* Logger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		1A26AFF41D3BE620000776A4 /* WindowsCATools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = WindowsCATools.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -177,7 +175,6 @@
 		84EB75FD1ECE07BD00716B48 /* PasswordPolicy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordPolicy.swift; sourceTree = "<group>"; };
 		84EB76031ED36C2E00716B48 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84EB76041ED36C2E00716B48 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = es; path = es.lproj/Languages.plist; sourceTree = "<group>"; };
-		84EB760E1ED3B0D100716B48 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		84F93A2A1D3886FA00ED2070 /* AutoConfigure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoConfigure.swift; sourceTree = "<group>"; };
 		BF34324A1D52844300CE8F89 /* NoMADTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NoMADTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BF34324C1D52844300CE8F89 /* NoMADTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoMADTests.swift; sourceTree = "<group>"; };
@@ -355,7 +352,6 @@
 		BF34324B1D52844300CE8F89 /* NoMADTests */ = {
 			isa = PBXGroup;
 			children = (
-				84EB760F1ED3B0D100716B48 /* InfoPlist.strings */,
 				BF34324C1D52844300CE8F89 /* NoMADTests.swift */,
 				BF34324E1D52844300CE8F89 /* Info.plist */,
 			);
@@ -477,7 +473,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				84EB760D1ED3B0D100716B48 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -666,15 +661,6 @@
 				1A2CFB681EF0EAA400F1D74C /* es */,
 			);
 			name = LoginWindow.xib;
-			sourceTree = "<group>";
-		};
-		84EB760F1ED3B0D100716B48 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				84EB760E1ED3B0D100716B48 /* es */,
-				1A1BA5B41F1D08B100E506D0 /* nl */,
-			);
-			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
