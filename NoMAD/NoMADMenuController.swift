@@ -346,66 +346,58 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
                 return
             }
 
-            // Run Kerberos authentication on background queue to avoid blocking main thread
-            DispatchQueue.global(qos: .default).async {
-                let myKerbUtil = KerbUtil()
-                var myErr: String?
+            let myKerbUtil = KerbUtil()
+            var myErr: String?
 
-                self.myWorkQueue.async {
-                    myErr = myKerbUtil.getKerbCredentials(myPass, userPrinc)
-                }
+            myWorkQueue.async(execute: {
+                myErr = myKerbUtil.getKerbCredentials(myPass, userPrinc)
+            })
 
-                while ( !myKerbUtil.finished ) {
-                    RunLoop.current.run(mode: .default, before: Date.distantFuture)
-                }
-
-                if myErr == nil {
-                    myLogger.logit(.base, message:"Automatically logged in.")
-
-                    _ = cliTask("/usr/bin/kswitch -p " +  userPrinc)
-
-                    // fire off the SignInCommand script if there is one
-                    if defaults.string(forKey: Preferences.signInCommand) != "" {
-                        let myResult = cliTask(defaults.string(forKey: Preferences.signInCommand)!)
-                        myLogger.logit(.base, message: myResult)
-                    }
-                    return
-                } else if (myErr?.contains("Preauthentication failed"))! {
-                    myLogger.logit(.base, message:"Autologin password error.")
-                    // password failed, let's delete it so as to not fail again
-                    var myKeychainItem: SecKeychainItem?
-                    var myErr: OSStatus
-                    let serviceName = "NoMAD"
-                    var passLength: UInt32 = 0
-                    var passPtr: UnsafeMutableRawPointer? = nil
-                    let name = defaults.string(forKey: Preferences.lastUser)! + "@" + defaults.string(forKey: Preferences.kerberosRealm)!
-
-                    myErr = SecKeychainFindGenericPassword(nil,
-                                                           UInt32(serviceName.count),
-                                                           serviceName,
-                                                           UInt32(name.count),
-                                                           name,
-                                                           &passLength,
-                                                           &passPtr, &myKeychainItem)
-                    if (myErr == 0) {
-                        SecKeychainItemDelete(myKeychainItem!)
-                    } else {
-                        myLogger.logit(.base, message:"Error deleting Keychain entry.")
-                    }
-                    // now show the window on main thread
-                    DispatchQueue.main.async {
-                        loginWindow.window!.forceToFrontAndFocus(nil)
-                    }
-                    return
-                } else  {
-                    myLogger.logit(.base, message:"Error attempting to automatically log in.")
-                    DispatchQueue.main.async {
-                        loginWindow.window!.forceToFrontAndFocus(nil)
-                    }
-                    return
-                }
+            while ( !myKerbUtil.finished ) {
+                RunLoop.current.run(mode: .default, before: Date.distantFuture)
             }
-            return
+
+            if myErr == nil {
+                myLogger.logit(.base, message:"Automatically logged in.")
+
+                _ = cliTask("/usr/bin/kswitch -p " +  userPrinc)
+
+                // fire off the SignInCommand script if there is one
+                if defaults.string(forKey: Preferences.signInCommand) != "" {
+                    let myResult = cliTask(defaults.string(forKey: Preferences.signInCommand)!)
+                    myLogger.logit(.base, message: myResult)
+                }
+                return
+            } else if (myErr?.contains("Preauthentication failed"))! {
+                myLogger.logit(.base, message:"Autologin password error.")
+                // password failed, let's delete it so as to not fail again
+                var myKeychainItem: SecKeychainItem?
+                var myErr: OSStatus
+                let serviceName = "NoMAD"
+                var passLength: UInt32 = 0
+                var passPtr: UnsafeMutableRawPointer? = nil
+                let name = defaults.string(forKey: Preferences.lastUser)! + "@" + defaults.string(forKey: Preferences.kerberosRealm)!
+
+                myErr = SecKeychainFindGenericPassword(nil,
+                                                       UInt32(serviceName.count),
+                                                       serviceName,
+                                                       UInt32(name.count),
+                                                       name,
+                                                       &passLength,
+                                                       &passPtr, &myKeychainItem)
+                if (myErr == 0) {
+                    SecKeychainItemDelete(myKeychainItem!)
+                } else {
+                    myLogger.logit(.base, message:"Error deleting Keychain entry.")
+                }
+                // now show the window
+                loginWindow.window!.forceToFrontAndFocus(nil)
+                return
+            } else  {
+                myLogger.logit(.base, message:"Error attempting to automatically log in.")
+                loginWindow.window!.forceToFrontAndFocus(nil)
+                return
+            }
         }
         loginWindow.window!.forceToFrontAndFocus(nil)
     }
