@@ -78,3 +78,6 @@
 
 /* Class = "NSMenuItem"; title = "Software and Help"; ObjectID = "wcV-DA-kNE"; */
 "wcV-DA-kNE.title" = "Software og Hjælp";
+
+/* Class = "NSMenuItem"; title = "Ticket Info"; ObjectID = "7uv-39-xiX"; */
+"7uv-39-xiX.title" = "Ticket-info";
