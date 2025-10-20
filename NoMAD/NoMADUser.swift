@@ -10,7 +10,7 @@ import Foundation
 import SystemConfiguration
 import SecurityFoundation
 
-let myWorkQueue = DispatchQueue(label: "com.trusourcelabs.NoMAD.background_work_queue", attributes: [])
+let myWorkQueue = DispatchQueue(label: "com.trusourcelabs.NoMAD.background_work_queue", qos: .default)
 
 enum NoMADUserError: Error, CustomStringConvertible {
     case itemNotFound(String)
@@ -76,42 +76,13 @@ class NoMADUser {
         self.cachedOriginalAuthenticationAuthority = try? String(describing: currentConsoleUserRecord.values(forAttribute: "dsAttrTypeStandard:OriginalAuthenticationAuthority")[0])
     }
 
-    // Synchronous factory method for backwards compatibility
+    // Synchronous convenience initializer for backwards compatibility
     convenience init(kerberosPrincipal: String) throws {
         guard let unwrappedCurrentConsoleUserRecord = NoMADUser.getCurrentConsoleUserRecord() else {
             myLogger.logit(LogLevel.debug, message: "Unable to get ODRecord for the current console user.")
             throw NoMADUserError.invalidResult("Unable to get ODRecord for the current console user.")
         }
         try self.init(kerberosPrincipal: kerberosPrincipal, currentConsoleUserRecord: unwrappedCurrentConsoleUserRecord)
-    }
-
-    // Async factory method - prevents UI blocking
-    static func create(kerberosPrincipal: String, completion: @escaping (Result<NoMADUser, NoMADUserError>) -> Void) {
-        // Perform OpenDirectory operations on background queue to prevent UI freezing
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                guard let currentConsoleUserRecord = NoMADUser.getCurrentConsoleUserRecord() else {
-                    DispatchQueue.main.async {
-                        completion(.failure(.invalidResult("Unable to get ODRecord for the current console user.")))
-                    }
-                    return
-                }
-
-                let user = try NoMADUser(kerberosPrincipal: kerberosPrincipal, currentConsoleUserRecord: currentConsoleUserRecord)
-
-                DispatchQueue.main.async {
-                    completion(.success(user))
-                }
-            } catch let error as NoMADUserError {
-                DispatchQueue.main.async {
-                    completion(.failure(error))
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    completion(.failure(.unknownError("Failed to create NoMADUser: \(error)")))
-                }
-            }
-        }
     }
     
     func currentConsoleUserMatchesNoMADUser() -> Bool {
@@ -751,5 +722,3 @@ func performPasswordChange(username: String, currentPassword: String, newPasswor
     
     return myError
 }
-
-

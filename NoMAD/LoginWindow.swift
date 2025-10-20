@@ -97,28 +97,34 @@ class LoginWindow: NSWindowController, NSWindowDelegate {
         //let GetCredentials: KerbUtil = KerbUtil()
         let currentPassword = Password.stringValue
 
-        // Use async factory method to prevent UI freezing during OpenDirectory operations
-        NoMADUser.create(kerberosPrincipal: userNameChecked) { [weak self] result in
-            guard let self = self else { return }
+        // Create NoMADUser synchronously on main thread
+        // This may trigger hang risk warnings but ensures the authentication flow works correctly
+        let noMADUser: NoMADUser
+        do {
+            noMADUser = try NoMADUser(kerberosPrincipal: userNameChecked)
+        } catch let error as NoMADUserError {
+            let alertController = NSAlert()
+            alertController.messageText = error.description
+            alertController.beginSheetModal(for: self.window!, completionHandler: nil)
+            myLogger.logit(.base, message: error.description)
+            signInSpinner.isHidden = true
+            signInSpinner.stopAnimation(nil)
+            logInButton.isEnabled = true
+            return
+        } catch {
+            let alertController = NSAlert()
+            alertController.messageText = "Failed to create user: \(error)"
+            alertController.beginSheetModal(for: self.window!, completionHandler: nil)
+            signInSpinner.isHidden = true
+            signInSpinner.stopAnimation(nil)
+            logInButton.isEnabled = true
+            return
+        }
 
-            switch result {
-            case .failure(let error):
-                // Handle NoMADUser creation errors
-                let alertController = NSAlert()
-                alertController.messageText = error.description
-                alertController.beginSheetModal(for: self.window!, completionHandler: nil)
-                myLogger.logit(.base, message: error.description)
-                self.signInSpinner.isHidden = true
-                self.signInSpinner.stopAnimation(nil)
-                self.logInButton.isEnabled = true
-                return
-
-            case .success(let noMADUser):
-                // Checks if the remote users's password is correct.
-                // If it is and the current console user is not an
-                // AD account, then we'll change it.
-
-                var myError = noMADUser.checkRemoteUserPassword(password: currentPassword)
+        // Checks if the remote users's password is correct.
+        // checkRemoteUserPassword pumps the main RunLoop, which keeps it active
+        // and allows queued UI updates to execute
+        var myError = noMADUser.checkRemoteUserPassword(password: currentPassword)
             
             // Let's present any errors we got before we do anything else.
             // We're using guard to check if myError is the correct value
@@ -159,28 +165,27 @@ class LoginWindow: NSWindowController, NSWindowDelegate {
                     myLogger.logit(.base, message:myError!)
                     EXIT_FAILURE
                 }
-                return
-            }
-            
+            return
+        }
 
-                // Checks if console password is correct.
-                let consoleUserPasswordResult = noMADUser.checkCurrentConsoleUserPassword(currentPassword)
-                // Checks if keychain password is correct
-                let keychainPasswordIsCorrect: Bool
-                do {
-                    keychainPasswordIsCorrect = try noMADUser.checkKeychainPassword(currentPassword)
-                } catch {
-                    myLogger.logit(LogLevel.base, message: "Error checking keychain password: \(error)")
-                    keychainPasswordIsCorrect = false
-                }
-            // Check if we want to store the password in the keychain.
-            let useKeychain = defaults.bool(forKey: Preferences.useKeychain)
-            // Check if we want to sync the console user's password with the remote AD password.
-            // Only used if console user is not AD.
-            var doLocalPasswordSync = false
-            
-            if defaults.bool(forKey: Preferences.localPasswordSync) {
-                if !suppressPasswordChange {
+        // Checks if console password is correct.
+        let consoleUserPasswordResult = noMADUser.checkCurrentConsoleUserPassword(currentPassword)
+        // Checks if keychain password is correct
+        let keychainPasswordIsCorrect: Bool
+        do {
+            keychainPasswordIsCorrect = try noMADUser.checkKeychainPassword(currentPassword)
+        } catch {
+            myLogger.logit(LogLevel.base, message: "Error checking keychain password: \(error)")
+            keychainPasswordIsCorrect = false
+        }
+        // Check if we want to store the password in the keychain.
+        let useKeychain = defaults.bool(forKey: Preferences.useKeychain)
+        // Check if we want to sync the console user's password with the remote AD password.
+        // Only used if console user is not AD.
+        var doLocalPasswordSync = false
+
+        if defaults.bool(forKey: Preferences.localPasswordSync) {
+            if !suppressPasswordChange {
                     // first we assume we'll sync all passwords until we decide that we shouldn't
                     
                     doLocalPasswordSync = true
@@ -214,7 +219,7 @@ class LoginWindow: NSWindowController, NSWindowDelegate {
                         
                         myLogger.logit(.debug, message: "Checking to see if user names match before syncing password.")
                         
-                        if NSUserName() != userName.stringValue {
+                        if NSUserName() != self.userName.stringValue {
                             // names match let's set the sync and preflight
                             myLogger.logit(.debug, message: "User names don't match, not syncing password.")
                             doLocalPasswordSync = false
@@ -224,8 +229,8 @@ class LoginWindow: NSWindowController, NSWindowDelegate {
                 }
                 
             }
-            
-            suppressPasswordChange = false
+
+            self.suppressPasswordChange = false
             
             
             let consoleUserIsAD = noMADUser.currentConsoleUserIsADuser()
@@ -313,9 +318,9 @@ class LoginWindow: NSWindowController, NSWindowDelegate {
                 
                 guard self.window != nil else {
                     myLogger.logit(LogLevel.debug, message: "Window does not exist.")
-                    signInSpinner.isHidden = true
-                    signInSpinner.stopAnimation(nil)
-                    logInButton.isEnabled = true
+                    self.signInSpinner.isHidden = true
+                    self.signInSpinner.stopAnimation(nil)
+                    self.logInButton.isEnabled = true
                     EXIT_FAILURE
                     // TODO: figure out if this is the proper way to handle this.
                     return
@@ -379,7 +384,6 @@ class LoginWindow: NSWindowController, NSWindowDelegate {
                         myLogger.logit(.base, message:"Local sync cancelled by user.")
                     }
                 })
-                
             } else {
                 myLogger.logit(LogLevel.info, message: "Not syncing local account because: ")
                 if consoleUserPasswordResult == "Valid" {
@@ -391,11 +395,11 @@ class LoginWindow: NSWindowController, NSWindowDelegate {
                 if consoleUserIsAD {
                     myLogger.logit(LogLevel.info, message: "Console user is AD account.")
                 }
-                    self.Password.stringValue = ""
-                    self.signInSpinner.isHidden = true
-                    self.signInSpinner.stopAnimation(nil)
-                    self.logInButton.isEnabled = true
-                    self.close()
+                    Password.stringValue = ""
+                    signInSpinner.isHidden = true
+                    signInSpinner.stopAnimation(nil)
+                    logInButton.isEnabled = true
+                    close()
                 }
 
                 // fire off the SignInCommand script if there is one
@@ -404,12 +408,10 @@ class LoginWindow: NSWindowController, NSWindowDelegate {
                     myLogger.logit(LogLevel.base, message: myResult)
                 }
 
-                self.signInSpinner.isHidden = true
-                self.signInSpinner.stopAnimation(nil)
-                self.logInButton.isEnabled = true
-            } // End of NoMADUser.create completion handler
-        } // End of NoMADUser.create call
-        
+        signInSpinner.isHidden = true
+        signInSpinner.stopAnimation(nil)
+        logInButton.isEnabled = true
+
         // DO NOT put self.close() here to try to save code,
         // it will mess up the local password sync code.
     }
