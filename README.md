@@ -1,86 +1,85 @@
-# NoMAD Projects Archived
+# NoMAD - Community Maintained Fork
 
-Jamf has decided to archive the NoMAD repos on GitHub. Going forward they aren’t going to receive any updates. 
+A community-maintained fork of NoMAD with modern macOS support and Swift modernization.
 
-While they are read-only, they aren’t being deleted. That means that anyone who wants to fork and use the code is welcome to do so. Everything remains MIT licensed and open source.
+## About This Fork
 
-The projects are still here and still open source, they just won’t be maintained by Jamf. Any existing issues or PRs have been closed.
+This fork continues development of NoMAD with focus on:
+- **macOS 26 compatibility** - Updated menu bar handling and API compatibility
+- **Swift 5.0/5.10 modernization** - Modern Swift syntax and reduced build warnings
+- **Enhanced localization** - Support for 8 languages (English, French, German, Swedish, Danish, Dutch, Polish, Spanish)
+- **Performance improvements** - Resolved UI threading issues and improved responsiveness
+- **Active maintenance** - Bug fixes and compatibility updates for current macOS versions
 
-You can see the official announcement on the [Jamf Blog](https://www.jamf.com/blog/jamf-to-archive-nomad-open-source-projects/).
+The original NoMAD project was archived by Jamf in 2024 and is available at [github.com/jamf/NoMAD](https://github.com/jamf/NoMAD).
 
-There is still an active user community on the [MacAdmins Slack nomad channel](https://macadmins.slack.com/archives/C1Y2Y14QG).
+## What is NoMAD?
 
-As always, have fun and read the man pages.
+NoMAD allows macOS systems to integrate with Active Directory without traditional AD binding, providing:
 
-macshome
+- **Kerberos SSO** - Automatic credential management for Windows Authentication
+- **Password synchronization** - Keep AD, local account, and FileVault passwords in sync
+- **Certificate management** - Obtain X509 identities from Windows CA
+- **AD site awareness** - Automatic LDAP server discovery and failover
+- **Password expiration warnings** - Proactive notification of upcoming password changes
+- **SmartCard/PKINIT support** - Alternative authentication methods
 
-# NoMAD 1.x
+## System Requirements
 
-The NoMAD 1.x releases have come to a close now with NoMAD 2 closing in on release. You can find the most current release (1.3.0) of NoMAD here in the releases section.
+- **macOS**: 10.10 (Yosemite) and later, tested through macOS 26
+- **Swift**: 5.0+
+- **Active Directory**: Any modern AD environment
 
-Please take a look at the [NoMAD 2](https://github.com/jamf/NoMAD-2) repo for current and ongoing work and discussions.
+## Installation
 
-Thanks for all the support!
+Download the latest release from the [Releases](https://github.com/arnemoor/NoMAD/releases) page.
 
---
+## Building from Source
 
-***NoMAD***
+```bash
+# Clone the repository
+git clone https://github.com/arnemoor/NoMAD.git
+cd NoMAD
 
-Get all of AD, with none of the bind! From now on you'll have no mo' need of AD.
+# Build with Xcode command line tools
+xcodebuild -project NoMAD.xcodeproj -scheme NoMAD -configuration Release build
 
-NoMAD allows for all of the functionality you would want from a Mac bound to
-Active Directory without having to actually bind to AD.
+# Or open in Xcode
+open NoMAD.xcodeproj
+```
 
-Supports macOS 10.10 and above.
+The build number is automatically set to the git commit count.
 
-***Features***
+## Configuration
 
-- Get Kerberos credentials from AD to use for single sign on for all services using Windows Authentication.
-- Automatically renew your Kerberos tickets based upon your desires.
-- Lock screen menu item.
-- Get an X509 identity from your Windows CA.
-- One click access to Casper and other self-service applications if installed.
-- One click access to creating a Bomgar chat session with a help desk operative, and other support options.
-- Admins can push one-line CLI commands to show up as a menu item in NoMAD.
-- Admins can specify LDAP servers to use instead of looking them up via SRV records.
-- Sync your AD password to your local account. Including keeping the user's local keychain and FileVault passwords in sync.
-- Users are warned about impending password expirations.
-- Single sign on access to the users Windows home directory.
-- Fully AD Site aware.
-- Scripts can be triggered on network change and sign in.
-- Admins can enable alternate methods of changing passwords beyond Kerberos.
+NoMAD can be configured via:
+- Preferences GUI in the application
+- Configuration profiles
+- Command-line defaults
 
-Coming in future versions:
+See the [configuration documentation](CLAUDE.md#common-development-tasks) for details.
 
-- VPN connection management for built-in VPN types.
-- Getting a Kerberos ticket as a side effect of a succesful VPN connection.
-- Mounting of arbitrary shares based upon configured values.
-- DFS resolution without needing to be bound.
-- Put x509 certificate into an 802.1x profile for use with wireless networks.
+## Community & Support
 
-Sample screen shot:
+- **Issues**: Report bugs and feature requests in [GitHub Issues](https://github.com/arnemoor/NoMAD/issues)
+- **Discussions**: Join the [MacAdmins Slack](https://macadmins.slack.com) #nomad channel
+- **Original Project**: [Jamf's archived NoMAD](https://github.com/jamf/NoMAD)
 
-![NoMad Screen Shot](https://gitlab.com/Mactroll/NoMAD/raw/master/screen-shot "NoMAD Screen Shot")
+## Contributing
 
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Submit a pull request with clear description of changes
 
-***Have Questions?***
+## License
 
-Feel free to report any issues that you're having or feature requests in the Issues section of the project page.
+MIT License - see LICENSE file for details.
 
-You can find some of the team in #nomad on the Mac Admins Slack. If you're not already a member you can join [here](http://macadmins.org).
+Original code copyright Jamf, community fork maintained by contributors.
 
-You can also discuss the development and get notified of new commits in #nomad-dev.
+## Credits
 
-***Sierra Support***
-
-NoMAD is built and primarily tested on macOS Sierra using Swift 3.
-
-***Experimental Branch***
-
-New features in development, or otherwise risky and irresponsible behavior goes into this branch first.
-
-***Thanks!***
-
-Thanks to a number of people for helping me out on this. Including those of you in the secret channel!
-
-Also a big thanks to @owen.pragel for testing and pontificating.
+- Original NoMAD development team at Jamf
+- MacAdmins community for continued support
+- All contributors to this fork
