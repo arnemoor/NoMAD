@@ -22,17 +22,33 @@ NoMAD allows macOS systems to integrate with Active Directory without traditiona
 - **Certificate management** - Obtain X509 identities from Windows CA
 - **AD site awareness** - Automatic LDAP server discovery and failover
 - **Password expiration warnings** - Proactive notification of upcoming password changes
-- **SmartCard/PKINIT support** - Alternative authentication methods
+- **Enhanced preferences UI** - Improved configuration interface for all NoMAD settings
+- **SmartCard/PKINIT support** - When bundled with PKINITer.app (separate download required)
 
 ## System Requirements
 
-- **macOS**: 10.10 (Yosemite) and later, tested through macOS 26
+- **macOS**: 13.5 (Ventura) or later, tested through macOS 26
 - **Swift**: 5.0+
 - **Active Directory**: Any modern AD environment
 
 ## Installation
 
-Download the latest release from the [Releases](https://github.com/arnemoor/NoMAD/releases) page.
+### Pre-built Releases
+
+Download the latest build from the [Releases](https://github.com/arnemoor/NoMAD/releases) page.
+
+### Creating a Release
+
+To create a new release:
+
+1. Build the app using the Release configuration
+2. Create a release archive: `Product > Archive` in Xcode
+3. Export the app bundle from the Organizer
+4. Create a new release on GitHub:
+   - Go to [Releases](https://github.com/arnemoor/NoMAD/releases) → "Draft a new release"
+   - Tag version (e.g., `v1.2.0`)
+   - Upload the `.app` bundle (optionally in a `.zip` or `.dmg`)
+   - Add release notes describing changes
 
 ## Building from Source
 
@@ -62,7 +78,7 @@ See the [configuration documentation](CLAUDE.md#common-development-tasks) for de
 ## Community & Support
 
 - **Issues**: Report bugs and feature requests in [GitHub Issues](https://github.com/arnemoor/NoMAD/issues)
-- **Discussions**: Join the [MacAdmins Slack](https://macadmins.slack.com) #nomad channel
+- **Discussions**: Join the original [MacAdmins Slack](https://macadmins.slack.com) #nomad channel
 - **Original Project**: [Jamf's archived NoMAD](https://github.com/jamf/NoMAD)
 
 ## Contributing

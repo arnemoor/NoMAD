@@ -96,8 +96,8 @@ xcodebuild test -project NoMAD.xcodeproj -scheme NoMAD
 
 ## Development Configuration
 
-- **Swift Version**: 4.0 (set in build settings)
-- **Minimum macOS**: 10.10 (Yosemite)
+- **Swift Version**: 5.0
+- **Minimum macOS**: 13.5 (Ventura)
 - **Bundle ID**: com.trusourcelabs.NoMAD
 - **Code Signing**: Requires developer certificate for distribution
 - **LSUIElement**: true (menu bar app, no dock icon)
