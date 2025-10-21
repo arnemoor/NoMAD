@@ -1310,7 +1310,11 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
                     // Show/hide home directory menu item based on preferences and connection status
                     if self.userInformation.connected && defaults.integer(forKey: Preferences.showHome) == 1 && self.userInformation.userHome != "" {
                         self.NoMADMenuHome.isHidden = false
-                        self.NoMADMenuHome.title = defaults.string(forKey: Preferences.menuHomeDirectory) ?? "HomeSharepoint".translate
+                        // Title is set in XIB and localized via MainMenu.strings
+                        // Only override if custom menuHomeDirectory preference is set
+                        if let customTitle = defaults.string(forKey: Preferences.menuHomeDirectory) {
+                            self.NoMADMenuHome.title = customTitle
+                        }
                         self.NoMADMenuHome.isEnabled = true
                     } else {
                         self.NoMADMenuHome.isHidden = true

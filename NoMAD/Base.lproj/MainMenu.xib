@@ -87,7 +87,7 @@
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="sep-Home-Prefs"/>
-                <menuItem title="Home Sharepoint" id="home-sharepoint-item">
+                <menuItem title="Home / Sharepoint" id="home-sharepoint-item">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="homeClicked" target="Gp4-Xp-pEc" id="home-action-click"/>
