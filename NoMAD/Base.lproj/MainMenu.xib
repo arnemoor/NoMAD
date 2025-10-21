@@ -86,6 +86,13 @@
                         <action selector="NoMADMenuClickHiddenItem1:" target="Gp4-Xp-pEc" id="lJW-OQ-96U"/>
                     </connections>
                 </menuItem>
+                <menuItem isSeparatorItem="YES" id="sep-Home-Prefs"/>
+                <menuItem title="Home Sharepoint" id="home-sharepoint-item">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="homeClicked" target="Gp4-Xp-pEc" id="home-action-click"/>
+                    </connections>
+                </menuItem>
                 <menuItem title="Preferences" id="3yQ-ft-CVW">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
@@ -116,6 +123,7 @@
                 <outlet property="NoMADMenuGetHelp" destination="rbx-v6-fJx" id="1bd-6M-fUQ"/>
                 <outlet property="NoMADMenuGetSoftware" destination="fuo-5h-NuR" id="rPu-zt-iBj"/>
                 <outlet property="NoMADMenuHiddenItem1" destination="kql-Bl-QJE" id="ehL-Ac-Qlb"/>
+                <outlet property="NoMADMenuHome" destination="home-sharepoint-item" id="home-outlet-conn"/>
                 <outlet property="NoMADMenuLockScreen" destination="3Pf-2O-qR7" id="gaI-5v-fzs"/>
                 <outlet property="NoMADMenuLogIn" destination="XL2-b8-IwM" id="t0s-gW-68X"/>
                 <outlet property="NoMADMenuLogInAlternate" destination="Wa6-S1-lXm" id="hAz-nN-kun"/>
@@ -123,6 +131,7 @@
                 <outlet property="NoMADMenuPasswordExpires" destination="CUr-ED-n29" id="n6a-qc-0L0"/>
                 <outlet property="NoMADMenuPreferences" destination="3yQ-ft-CVW" id="iix-dH-1bd"/>
                 <outlet property="NoMADMenuQuit" destination="gM7-FQ-f0l" id="N9U-ev-u6J"/>
+                <outlet property="NoMADMenuSeperatorHomePrefs" destination="sep-Home-Prefs" id="sep-home-outlet-conn"/>
                 <outlet property="NoMADMenuSeperatorSoftwareAndHelp" destination="wcV-DA-kNE" id="1kw-r7-9Qm"/>
                 <outlet property="NoMADMenuSeperatorTicketLife" destination="7uv-39-xiX" id="AAH-Cu-ppa"/>
                 <outlet property="NoMADMenuSpewLogs" destination="pC8-5a-Aec" id="trl-C0-H9J"/>

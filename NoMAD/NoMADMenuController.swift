@@ -51,6 +51,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
     @IBOutlet weak var NoMADMenuGetSoftware: NSMenuItem!
     @IBOutlet weak var NoMADMenuGetHelp: NSMenuItem!
     @IBOutlet weak var NoMADMenuHiddenItem1: NSMenuItem!
+    @IBOutlet weak var NoMADMenuHome: NSMenuItem!
     @IBOutlet weak var NoMADMenuPreferences: NSMenuItem!
     @IBOutlet weak var NoMADMenuQuit: NSMenuItem!
     @IBOutlet weak var NoMADMenuSpewLogs: NSMenuItem!
@@ -59,8 +60,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
     @IBOutlet weak var NoMADMenuLogInAlternate: NSMenuItem!
     @IBOutlet weak var NoMADMenuSeperatorSoftwareAndHelp: NSMenuItem!
     @IBOutlet weak var NoMADMenuSeperatorTicketLife: NSMenuItem!
-
-    let NoMADMenuHome = NSMenuItem()
+    @IBOutlet weak var NoMADMenuSeperatorHomePrefs: NSMenuItem!
 
     // menu bar icons
 
@@ -75,9 +75,6 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
     var myIconOffDark = NSImage()
 
     let userNotificationCenter = NSUserNotificationCenter.default
-
-    var originalGetCertificateMenu : NSMenuItem!
-    var originalGetCertificateMenuDate : NSMenuItem!
 
     let userInformation = UserInformation()
 
@@ -316,9 +313,6 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
         if defaults.bool(forKey: Preferences.hideLockScreen) {
             NoMADMenuLockScreen.isHidden = true
         }
-
-        originalGetCertificateMenu = NoMADMenuGetCertificate
-        originalGetCertificateMenuDate = NoMADMenuGetCertificateDate
 
         // determine if we should show the Password Change Menu Item
         if let showPasswordChange = defaults.string(forKey: Preferences.changePasswordType) {
@@ -1313,32 +1307,20 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
                         self.NoMADMenuHiddenItem1.isEnabled = false
                     }
 
-                    // add home directory menu item
+                    // Show/hide home directory menu item based on preferences and connection status
+                    if self.userInformation.connected && defaults.integer(forKey: Preferences.showHome) == 1 && self.userInformation.userHome != "" {
+                        self.NoMADMenuHome.isHidden = false
+                        self.NoMADMenuHome.title = defaults.string(forKey: Preferences.menuHomeDirectory) ?? "HomeSharepoint".translate
+                        self.NoMADMenuHome.isEnabled = true
+                    } else {
+                        self.NoMADMenuHome.isHidden = true
+                    }
 
-                    if self.userInformation.connected && defaults.integer(forKey: Preferences.showHome) == 1 {
-
-                        if ( self.userInformation.userHome != "" && self.NoMADMenu.items.contains(self.NoMADMenuHome) == false ) {
-                            self.NoMADMenuHome.title = defaults.string(forKey: Preferences.menuHomeDirectory) ?? "HomeSharepoint".translate
-                            self.NoMADMenuHome.action = #selector(self.homeClicked)
-                            self.NoMADMenuHome.target = self
-                            self.NoMADMenuHome.isEnabled = true
-                            // should key this off of the position of the Preferences menu
-                            let prefIndex = self.NoMADMenu.index(of: self.NoMADMenuPreferences)
-                            self.NoMADMenu.insertItem(self.NoMADMenuHome, at: (prefIndex - 1 ))
-                        } else if self.userInformation.userHome != "" && self.NoMADMenu.items.contains(self.NoMADMenuHome) {
-                            self.NoMADMenuHome.title = defaults.string(forKey: Preferences.menuHomeDirectory) ?? "HomeSharepoint".translate
-                            self.NoMADMenuHome.action = #selector(self.homeClicked)
-                            self.NoMADMenuHome.target = self
-                            self.NoMADMenuHome.isEnabled = true
-                        } else if self.NoMADMenu.items.contains(self.NoMADMenuHome) {
-                            self.NoMADMenu.removeItem(self.NoMADMenuHome)
-
-                        }
-
-                        // Share Mounter setup taken out for now
-
-                        //self.myShareMounter.asyncMountShare("smb:" + defaults.stringForKey("UserHome"))!)
-                        //self.myShareMounter.mount()
+                    // Hide the separator before Home/Preferences if both Home and Hidden Item 1 are hidden
+                    if self.NoMADMenuHome.isHidden && self.NoMADMenuHiddenItem1.isHidden {
+                        self.NoMADMenuSeperatorHomePrefs.isHidden = true
+                    } else {
+                        self.NoMADMenuSeperatorHomePrefs.isHidden = false
                     }
                 })
 
@@ -1374,19 +1356,13 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
                     defaults.set(Double(defaults.integer(forKey: Preferences.passwordExpireAlertTime) ?? 1296000), forKey: Preferences.lastPasswordWarning)
                 }
 
-                // remove the Get Certificate menu if not needed
-                // add it back in when it is needed
-
-                if defaults.string(forKey: Preferences.x509CA) == "" && self.NoMADMenuGetCertificate != nil {
-                    self.NoMADMenu.removeItem(self.NoMADMenuGetCertificate)
-                    self.NoMADMenu.removeItem(self.NoMADMenuGetCertificateDate)
-                    self.NoMADMenuGetCertificate = nil
-                } else if defaults.string(forKey: Preferences.x509CA) != "" && self.NoMADMenuGetCertificate == nil{
-                    self.NoMADMenuGetCertificate = self.originalGetCertificateMenu
-                    self.NoMADMenuGetCertificateDate = self.originalGetCertificateMenuDate
-                    let lockIndex = self.NoMADMenu.index(of: self.NoMADMenuLockScreen)
-                    self.NoMADMenu.insertItem(self.NoMADMenuGetCertificate, at: (lockIndex + 1 ))
-                    self.NoMADMenu.insertItem(self.NoMADMenuGetCertificateDate, at: (lockIndex + 2 ))
+                // Show/hide the Get Certificate menu based on X509CA preference
+                if defaults.string(forKey: Preferences.x509CA) == "" {
+                    self.NoMADMenuGetCertificate.isHidden = true
+                    self.NoMADMenuGetCertificateDate.isHidden = true
+                } else {
+                    self.NoMADMenuGetCertificate.isHidden = false
+                    self.NoMADMenuGetCertificateDate.isHidden = false
                     self.NoMADMenuGetCertificate.title = defaults.string(forKey: Preferences.menuGetCertificate) ?? "Get Certificate"
                 }
                 
