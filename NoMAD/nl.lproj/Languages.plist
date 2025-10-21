@@ -23,13 +23,6 @@
 		<key>value</key>
 		<string>Verbindingsfout. Controleer of SSL certificaten vertrouwd zijn en dat de URL correct is voor uw X509 CA.</string>
 	</dict>
-	<key>HomeSharepoint</key>
-	<dict>
-		<key>comment</key>
-		<string>Menu onderdeel om de thuismap op het netwerkvolume zoals bekend in het AD gebruikersprofiel te openen.</string>
-		<key>value</key>
-		<string>Thuismap op netwerkvolume</string>
-	</dict>
 	<key>InvalidPassword</key>
 	<dict>
 		<key>comment</key>
@@ -43,13 +36,6 @@
 		<string>melding als de gebruikersnaam niet correct is</string>
 		<key>value</key>
 		<string>Ongeldige gebruikersnaam. Probeer het opnieuw.</string>
-	</dict>
-	<key>Lock Screen</key>
-	<dict>
-		<key>comment</key>
-		<string>Menu onderdeel om het scherm te vergrendelen</string>
-		<key>value</key>
-		<string>Vergrendel scherm</string>
 	</dict>
 	<key>LoginWindow-OldPasswordLabel</key>
 	<dict>
@@ -82,23 +68,9 @@
 	<key>NoMADMenuController-Connected</key>
 	<dict>
 		<key>comment</key>
-		<string>Tekst in de menubalk om aan te geven dat NoMAD het domein kan vinden</string>
+		<string>Status when connected to AD</string>
 		<key>value</key>
-		<string></string>
-	</dict>
-	<key>NoMADMenuController-GetHelp</key>
-	<dict>
-		<key>comment</key>
-		<string>Menu onderdeel om support opties te tonen.</string>
-		<key>value</key>
-		<string>Toon hulp</string>
-	</dict>
-	<key>NoMADMenuController-GetSoftware</key>
-	<dict>
-		<key>comment</key>
-		<string>Menu onderdeel om software portaal te openen.</string>
-		<key>value</key>
-		<string>Toon software</string>
+		<string>Connected</string>
 	</dict>
 	<key>NoMADMenuController-NoUser</key>
 	<dict>
@@ -106,13 +78,6 @@
 		<string>User info als de gebruiker niet gevonden is</string>
 		<key>value</key>
 		<string>Geen gebruiker</string>
-	</dict>
-	<key>NoMADMenuController-NotConnected</key>
-	<dict>
-		<key>comment</key>
-		<string>Tekst in de menubalk om aan te geven dat NoMAD het domein niet kan vinden</string>
-		<key>value</key>
-		<string>Niet verbonden</string>
 	</dict>
 	<key>NoMADMenuController-NotLoggedIn</key>
 	<dict>
@@ -135,20 +100,6 @@
 		<key>value</key>
 		<string>Wachtwoord verloopt over: %@ dagen</string>
 	</dict>
-	<key>NoMADMenuController-Preferences</key>
-	<dict>
-		<key>comment</key>
-		<string>Menu onderdeel om voorkeuren venster te openen.</string>
-		<key>value</key>
-		<string>Voorkeuren</string>
-	</dict>
-	<key>NoMADMenuController-Quit</key>
-	<dict>
-		<key>comment</key>
-		<string>Menu onderdeel om NoMAD te stoppen.</string>
-		<key>value</key>
-		<string>Stop</string>
-	</dict>
 	<key>NoMADMenuController-RenewTickets</key>
 	<dict>
 		<key>comment</key>
@@ -156,26 +107,12 @@
 		<key>value</key>
 		<string>Vernieuw tickets</string>
 	</dict>
-	<key>NoMADMenuController-SignInWithSmartcard</key>
-	<dict>
-		<key>comment</key>
-		<string>PKINIT smartcard menu authenticatie tool tip</string>
-		<key>value</key>
-		<string>Authenticeer met Smartcard.</string>
-	</dict>
-	<key>NoMADMenuController-SmartcardSignIn</key>
-	<dict>
-		<key>comment</key>
-		<string>PKINIT smartcard menu authenticatie</string>
-		<key>value</key>
-		<string>Smartcard authenticatie</string>
-	</dict>
 	<key>PasswordAboutToExpire</key>
 	<dict>
 		<key>comment</key>
-		<string>melding als het wachtwoord binnenkort verloopt.</string>
+		<string>message when password is about to expire</string>
 		<key>value</key>
-		<string>Wachtwoord verloopt binnenkort!</string>
+		<string>Password about to expire!</string>
 	</dict>
 	<key>PasswordChangeSuccessful</key>
 	<dict>
@@ -246,13 +183,6 @@
 		<string>Meldingstekst om opnieuw te authenticeren als wachtwoord aangepast is</string>
 		<key>value</key>
 		<string>Uw wachtwoord was aangepast. Authenticeer opnieuw in met NoMAD om uw wachtwoord bij te werken. Your password was changed, please re-sign into NoMAD to update your password.</string>
-	</dict>
-	<key>UserName</key>
-	<dict>
-		<key>comment</key>
-		<string>Gebruikers volledige naam</string>
-		<key>value</key>
-		<string>Gebruikers naam Name</string>
 	</dict>
 	<key>ValidCertificate</key>
 	<dict>

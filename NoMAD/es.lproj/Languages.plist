@@ -23,13 +23,6 @@
 		<key>value</key>
 		<string>Error de conexión. Por favor asegurate que los certificados SSL son de confianza y la URL para tu CA X509 sea correcta.</string>
 	</dict>
-	<key>HomeSharepoint</key>
-	<dict>
-		<key>comment</key>
-		<string>Item del menu para abrir la carpeta de usuario compartida en red de su perfil de AD</string>
-		<key>value</key>
-		<string>Carpeta de usuario compartida en red</string>
-	</dict>
 	<key>InvalidPassword</key>
 	<dict>
 		<key>comment</key>
@@ -43,13 +36,6 @@
 		<string>error cuando el nombre de usuario es incorrecto</string>
 		<key>value</key>
 		<string>Nombre de usuario incorrecto. Por favor prueba de nuevo</string>
-	</dict>
-	<key>Lock Screen</key>
-	<dict>
-		<key>comment</key>
-		<string>Item del menú para bloquear la pantalla</string>
-		<key>value</key>
-		<string>Bloquear pantalla</string>
 	</dict>
 	<key>LoginWindow-OldPasswordLabel</key>
 	<dict>
@@ -82,23 +68,9 @@
 	<key>NoMADMenuController-Connected</key>
 	<dict>
 		<key>comment</key>
-		<string>Texto en la barra de menu para mostrar que NoMAD no puede encontrar el dominio</string>
+		<string>Status when connected to AD</string>
 		<key>value</key>
-		<string></string>
-	</dict>
-	<key>NoMADMenuController-GetHelp</key>
-	<dict>
-		<key>comment</key>
-		<string>Item del menu para abrir las opciones de soporte</string>
-		<key>value</key>
-		<string>Obtener ayuda</string>
-	</dict>
-	<key>NoMADMenuController-GetSoftware</key>
-	<dict>
-		<key>comment</key>
-		<string>Item del menu para abrir el portal de aplicaciones.</string>
-		<key>value</key>
-		<string>Obtener aplicación</string>
+		<string>Connected</string>
 	</dict>
 	<key>NoMADMenuController-NoUser</key>
 	<dict>
@@ -106,13 +78,6 @@
 		<string>Información del usuario cuando no está disponible ningún usuario</string>
 		<key>value</key>
 		<string>Sin usuario</string>
-	</dict>
-	<key>NoMADMenuController-NotConnected</key>
-	<dict>
-		<key>comment</key>
-		<string>Texto en la barra de menu para mostrar que NoMAD no puede encontrar el dominio</string>
-		<key>value</key>
-		<string>Sin conexión</string>
 	</dict>
 	<key>NoMADMenuController-NotLoggedIn</key>
 	<dict>
@@ -135,20 +100,6 @@
 		<key>value</key>
 		<string>La contraseña caduca en: %@ días</string>
 	</dict>
-	<key>NoMADMenuController-Preferences</key>
-	<dict>
-		<key>comment</key>
-		<string>Item del menu para abrir la venta de preferencias.</string>
-		<key>value</key>
-		<string>Preferencias</string>
-	</dict>
-	<key>NoMADMenuController-Quit</key>
-	<dict>
-		<key>comment</key>
-		<string>Item del menu para cerrar NoMAD.</string>
-		<key>value</key>
-		<string>Cerrar</string>
-	</dict>
 	<key>NoMADMenuController-RenewTickets</key>
 	<dict>
 		<key>comment</key>
@@ -156,26 +107,12 @@
 		<key>value</key>
 		<string>Renovar tickets</string>
 	</dict>
-	<key>NoMADMenuController-SignInWithSmartcard</key>
-	<dict>
-		<key>comment</key>
-		<string>PKINIT smartcard menu sign in tool tip</string>
-		<key>value</key>
-		<string>Iniciar sesión con SmartCard.</string>
-	</dict>
-	<key>NoMADMenuController-SmartcardSignIn</key>
-	<dict>
-		<key>comment</key>
-		<string>Menu para iniciar sesión con PKINIT smartcard</string>
-		<key>value</key>
-		<string>Iniciar sesión con SmartCard</string>
-	</dict>
 	<key>PasswordAboutToExpire</key>
 	<dict>
 		<key>comment</key>
-		<string>mensaje cuando tu contraseña está a punto de caducar</string>
+		<string>message when password is about to expire</string>
 		<key>value</key>
-		<string>¡Contraseña a punto de caducar!</string>
+		<string>Password about to expire!</string>
 	</dict>
 	<key>PasswordChangeSuccessful</key>
 	<dict>
@@ -246,13 +183,6 @@
 		<string>Notificación pidiendo el inicio de otra vez otra vez</string>
 		<key>value</key>
 		<string>Tu contraseña fue cambiada, por favor reinicia sesión en NoMAD para actualizar tu contraseña</string>
-	</dict>
-	<key>UserName</key>
-	<dict>
-		<key>comment</key>
-		<string>Nombre completo de usuario</string>
-		<key>value</key>
-		<string>Nombre de usuario</string>
 	</dict>
 	<key>ValidCertificate</key>
 	<dict>

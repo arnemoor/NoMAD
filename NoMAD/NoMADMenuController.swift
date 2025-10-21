@@ -57,10 +57,10 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
     @IBOutlet weak var NoMADMenuSpewLogs: NSMenuItem!
     @IBOutlet weak var NoMADMenuGetCertificateDate: NSMenuItem!
     @IBOutlet weak var NoMADMenuTicketLife: NSMenuItem!
-    @IBOutlet weak var NoMADMenuLogInAlternate: NSMenuItem!
     @IBOutlet weak var NoMADMenuSeperatorSoftwareAndHelp: NSMenuItem!
     @IBOutlet weak var NoMADMenuSeperatorTicketLife: NSMenuItem!
     @IBOutlet weak var NoMADMenuSeperatorHomePrefs: NSMenuItem!
+    @IBOutlet weak var PKINITMenuItem: NSMenuItem!
 
     // menu bar icons
 
@@ -102,9 +102,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
     var selfService: SelfServiceType?
 
     let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-    
-    let PKINITMenuItem = NSMenuItem()
-    
+
     let myKeychainutil = KeychainUtil()
 
     /// Fired when the menu loads the first time
@@ -222,23 +220,13 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             doTheNeedfull()
         }
 
-        // Add a PKINIT menu if PKINITer is in the bundle
-
+        // Show/hide PKINIT menu based on whether PKINITer is in the bundle
+        // Title and tooltip are set in XIB and localized via MainMenu.strings
         if findPKINITer() {
-
-            // we have PKINITer so build the menu
-            // TODO: translate these items
-
-            PKINITMenuItem.title = "NoMADMenuController-SmartcardSignIn".translate
-            PKINITMenuItem.toolTip = "NoMADMenuController-SignInWithSmartcard".translate
-            PKINITMenuItem.action = #selector(smartcardSignIn)
-            PKINITMenuItem.target = self
+            PKINITMenuItem.isHidden = false
             PKINITMenuItem.isEnabled = true
-
-            // add the menu
-
-            NoMADMenu.insertItem(PKINITMenuItem, at: (NoMADMenu.index(of: self.NoMADMenuSeperatorTicketLife) + 1))
-
+        } else {
+            PKINITMenuItem.isHidden = true
         }
 
         // set up some default menu items
@@ -306,9 +294,10 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
         firstRun = false
 
-        // set up menu titles w/translation
-        NoMADMenuLockScreen.title = "Lock Screen".translate
-        NoMADMenuChangePassword.title = defaults.string(forKey: Preferences.menuChangePassword) ?? "NoMADMenuController-ChangePassword".translate
+        // Menu titles are set in XIB and localized via MainMenu.strings
+        // Only override if custom preferences are set
+        NoMADMenuChangePassword.title = localizedMenuTitle(key: "NoMADMenuController-ChangePassword",
+                                                            preferenceKey: Preferences.menuChangePassword)
 
         if defaults.bool(forKey: Preferences.hideLockScreen) {
             NoMADMenuLockScreen.isHidden = true
@@ -442,7 +431,9 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             let myResult = cliTask(signOutCommand)
             myLogger.logit(LogLevel.base, message: myResult)
         }
-        userInformation.connected = false
+
+        // Clear all user information so UI shows "Not Signed In" state
+        userInformation.clearUserInfo()
         lastStatusCheck = Date().addingTimeInterval(-5000)
         updateUserInfo()
     }
@@ -531,7 +522,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
     // show PKINITer when asked
 
-    @objc func smartcardSignIn() {
+    @IBAction func smartcardSignIn(_ sender: NSMenuItem) {
         launchPKINITer()
     }
 
@@ -662,20 +653,12 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
 
     }
 
-    @IBAction func NoMADMenuClickLogInAlternate(_ sender: AnyObject) {
-        //loginWindow.showWindow(nil)
-
-        // set flag to ignore pssword sync
-        loginWindow.window!.forceToFrontAndFocus(nil)
-        loginWindow.suppressPasswordChange = true
-    }
-
     // this will update the menu when it's clicked
     @objc func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
         // Makes all NoMAD windows come to top
         // NSApp.activateIgnoringOtherApps(true)
 
-        if menuItem.title == "Lock Screen".translate {
+        if menuItem == NoMADMenuLockScreen {
             updateUserInfo()
         }
 
@@ -744,7 +727,7 @@ class NoMADMenuController: NSObject, LoginWindowDelegate, PasswordChangeDelegate
             NoMADMenuPreferences.isEnabled = false
             NoMADMenuSpewLogs.isHidden = true
 
-            myLogger.logit(.notice, message:NSLocalizedString("NoMADMenuController-PreferencesDisabled", comment: "Log; Text; Preferences Disabled"))
+            myLogger.logit(.notice, message:"Preferences Disabled")
         }
 
         return true

@@ -68,6 +68,25 @@ class UserInformation {
         }
     }
 
+    // Clear all user information (called on logout)
+    func clearUserInfo() {
+        userShortName = ""
+        userLongName = ""
+        userPrincipal = ""
+        userPrincipalShort = ""
+        userPasswordSetDate = NSDate()
+        userPasswordExpireDate = NSDate()
+        userHome = ""
+        userCertDate = NSDate()
+        userDisplayName = ""
+        userEmail = ""
+        UPN = ""
+        groups = []
+        status = "Not Connected"
+        connected = false
+        passwordAging = false
+    }
+
     func checkNetwork() -> Bool {
         myLDAPServers.check()
         return myLDAPServers.returnState()

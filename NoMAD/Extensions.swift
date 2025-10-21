@@ -29,3 +29,13 @@ extension String {
     }
 
 }
+
+// Global helper to get localized text with optional preference override
+// This ensures consistent behavior: preference override > Languages.plist translation
+func localizedMenuTitle(key: String, preferenceKey: String) -> String {
+    let defaults = UserDefaults.standard
+    if let customText = defaults.string(forKey: preferenceKey), !customText.isEmpty {
+        return customText
+    }
+    return key.translate
+}

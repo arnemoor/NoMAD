@@ -69,11 +69,31 @@ The build number is automatically set to the git commit count.
 ## Configuration
 
 NoMAD can be configured via:
-- Preferences GUI in the application
-- Configuration profiles
-- Command-line defaults
+- **Preferences GUI** - Built-in preferences window in the application
+- **Configuration profiles** - MDM deployment with `com.trusourcelabs.NoMAD` domain
+- **Command-line** - `defaults write com.trusourcelabs.NoMAD <key> <value>`
 
-See the [configuration documentation](CLAUDE.md#common-development-tasks) for details.
+### Documentation
+
+- **[Complete Preferences Reference](PREFERENCES.md)** - All 89 configuration options with examples
+- **[Menu Visibility Guide](PREFERENCES.md#menu-item-visibility-conditions)** - What controls each menu item
+- **[Configuration Examples](PREFERENCES.md#configuration-examples)** - Common deployment scenarios
+- **[Troubleshooting](PREFERENCES.md#troubleshooting)** - Debug logging and diagnostics
+
+### Quick Start
+
+```bash
+# Set your AD domain
+defaults write com.trusourcelabs.NoMAD ADDomain "corp.example.com"
+
+# Enable password sync
+defaults write com.trusourcelabs.NoMAD LocalPasswordSync -bool true
+
+# Set expiration warning to 14 days
+defaults write com.trusourcelabs.NoMAD PasswordExpireAlertTime -int 14
+```
+
+See [PREFERENCES.md](PREFERENCES.md) for complete documentation.
 
 ## Community & Support
 

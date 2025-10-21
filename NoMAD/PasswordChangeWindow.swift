@@ -96,9 +96,11 @@ class PasswordChangeWindow: NSWindowController, NSWindowDelegate, NSTextFieldDel
             HelpButton.isHidden = true
         }
 
-        // set the button text
-        passwordChangeButton.title = "NoMADMenuController-ChangePassword".translate
-        self.window?.title = "NoMADMenuController-ChangePassword".translate
+        // set the button text - use helper to respect preference override
+        let changePasswordTitle = localizedMenuTitle(key: "NoMADMenuController-ChangePassword",
+                                                      preferenceKey: Preferences.menuChangePassword)
+        passwordChangeButton.title = changePasswordTitle
+        self.window?.title = changePasswordTitle
         
         // set up the popover view
         

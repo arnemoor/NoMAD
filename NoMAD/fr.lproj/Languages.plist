@@ -23,13 +23,6 @@
 		<key>value</key>
 		<string>Erreur de connexion. Assurez-vous que les certificats SSL sont approuvés et que l'URL est correcte pour votre X509 CA.</string>
 	</dict>
-	<key>HomeSharepoint</key>
-	<dict>
-		<key>comment</key>
-		<string>Menu item for opening up a user's home sharepoint from their AD profile</string>
-		<key>value</key>
-		<string>Le dossier Home</string>
-	</dict>
 	<key>InvalidPassword</key>
 	<dict>
 		<key>comment</key>
@@ -43,13 +36,6 @@
 		<string>error when username is wrong</string>
 		<key>value</key>
 		<string>Nom d'utilisateur invalide. Veuillez réessayer.</string>
-	</dict>
-	<key>Lock Screen</key>
-	<dict>
-		<key>comment</key>
-		<string>Menu Item to Lock the Screen</string>
-		<key>value</key>
-		<string>Verrouiller l'écran</string>
 	</dict>
 	<key>LoginWindow-OldPasswordLabel</key>
 	<dict>
@@ -82,23 +68,9 @@
 	<key>NoMADMenuController-Connected</key>
 	<dict>
 		<key>comment</key>
-		<string>Text in the menu bar to show that NoMAD can find the Domain</string>
+		<string>Status when connected to AD</string>
 		<key>value</key>
-		<string></string>
-	</dict>
-	<key>NoMADMenuController-GetHelp</key>
-	<dict>
-		<key>comment</key>
-		<string>Menu item to open up the support options.</string>
-		<key>value</key>
-		<string>Obtenir de l'aide</string>
-	</dict>
-	<key>NoMADMenuController-GetSoftware</key>
-	<dict>
-		<key>comment</key>
-		<string>Menu item to open software portal.</string>
-		<key>value</key>
-		<string>Logiciels à la demande</string>
+		<string>Connected</string>
 	</dict>
 	<key>NoMADMenuController-NoUser</key>
 	<dict>
@@ -106,13 +78,6 @@
 		<string>User info when no user is available</string>
 		<key>value</key>
 		<string>No User</string>
-	</dict>
-	<key>NoMADMenuController-NotConnected</key>
-	<dict>
-		<key>comment</key>
-		<string>Text in the menu bar to show that NoMAD can not find the Domain</string>
-		<key>value</key>
-		<string>Pas connecté</string>
 	</dict>
 	<key>NoMADMenuController-NotLoggedIn</key>
 	<dict>
@@ -135,20 +100,6 @@
 		<key>value</key>
 		<string>Le mot de passe expire dans %@ jours</string>
 	</dict>
-	<key>NoMADMenuController-Preferences</key>
-	<dict>
-		<key>comment</key>
-		<string>Menu item to open Preferences window.</string>
-		<key>value</key>
-		<string>Préférences</string>
-	</dict>
-	<key>NoMADMenuController-Quit</key>
-	<dict>
-		<key>comment</key>
-		<string>Menu item to quit NoMAD.</string>
-		<key>value</key>
-		<string>Quitter</string>
-	</dict>
 	<key>NoMADMenuController-RenewTickets</key>
 	<dict>
 		<key>comment</key>
@@ -156,26 +107,12 @@
 		<key>value</key>
 		<string>Renouveler le ticket</string>
 	</dict>
-	<key>NoMADMenuController-SignInWithSmartcard</key>
-	<dict>
-		<key>comment</key>
-		<string>PKINIT smartcard menu sign in tool tip</string>
-		<key>value</key>
-		<string>Sign in with a Smartcard.</string>
-	</dict>
-	<key>NoMADMenuController-SmartcardSignIn</key>
-	<dict>
-		<key>comment</key>
-		<string>PKINIT smartcard menu sign in</string>
-		<key>value</key>
-		<string>Smartcard Sign In</string>
-	</dict>
 	<key>PasswordAboutToExpire</key>
 	<dict>
 		<key>comment</key>
 		<string>message when password is about to expire</string>
 		<key>value</key>
-		<string>Mot de passe à expiration!</string>
+		<string>Password about to expire!</string>
 	</dict>
 	<key>PasswordChangeSuccessful</key>
 	<dict>
@@ -246,13 +183,6 @@
 		<string>Notification text asking to sign in again</string>
 		<key>value</key>
 		<string>Your password was changed, please re-sign into NoMAD to update your password.</string>
-	</dict>
-	<key>UserName</key>
-	<dict>
-		<key>comment</key>
-		<string>User's full name</string>
-		<key>value</key>
-		<string>Nom d'utilisateur</string>
 	</dict>
 	<key>ValidCertificate</key>
 	<dict>

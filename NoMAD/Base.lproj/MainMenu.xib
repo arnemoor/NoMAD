@@ -26,16 +26,16 @@
                     <modifierMask key="keyEquivalentModifierMask" option="YES"/>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" title="Ticket Info" id="7uv-39-xiX"/>
-                <menuItem title="Log In 2" toolTip="Sign in with your network account." id="XL2-b8-IwM">
+                <menuItem title="Smartcard Sign In" toolTip="Sign in with a Smartcard." id="pkinit-item">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="smartcardSignIn" target="Gp4-Xp-pEc" id="pkinit-action"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Sign In" toolTip="Sign in with your network account." id="XL2-b8-IwM">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="NoMADMenuClickLogIn:" target="Gp4-Xp-pEc" id="wVm-5I-piH"/>
-                    </connections>
-                </menuItem>
-                <menuItem title="Sign In" alternate="YES" toolTip="Sign in with your network account." id="Wa6-S1-lXm">
-                    <modifierMask key="keyEquivalentModifierMask" control="YES" option="YES"/>
-                    <connections>
-                        <action selector="NoMADMenuClickLogInAlternate:" target="Gp4-Xp-pEc" id="Ght-9J-Q4Q"/>
                     </connections>
                 </menuItem>
                 <menuItem title="Change Password" toolTip="Change your network password." id="0IM-ZO-KLA">
@@ -80,7 +80,7 @@
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="vag-tC-mEc"/>
-                <menuItem title="Hidden Item 1" id="kql-Bl-QJE">
+                <menuItem title="Hidden Item 1" id="kql-Bl-QJE" userLabel="I">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="NoMADMenuClickHiddenItem1:" target="Gp4-Xp-pEc" id="lJW-OQ-96U"/>
@@ -99,7 +99,7 @@
                         <action selector="NoMADMenuClickPreferences:" target="Gp4-Xp-pEc" id="JtX-Sp-fgv"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Dump Logs" hidden="YES" alternate="YES" id="pC8-5a-Aec">
+                <menuItem title="Dump Logs" hidden="YES" alternate="YES" id="pC8-5a-Aec" userLabel="I">
                     <modifierMask key="keyEquivalentModifierMask" control="YES" option="YES"/>
                     <connections>
                         <action selector="NoMADMenuClickSpewLogs:" target="Gp4-Xp-pEc" id="aX2-5X-Gjx"/>
@@ -126,7 +126,7 @@
                 <outlet property="NoMADMenuHome" destination="home-sharepoint-item" id="home-outlet-conn"/>
                 <outlet property="NoMADMenuLockScreen" destination="3Pf-2O-qR7" id="gaI-5v-fzs"/>
                 <outlet property="NoMADMenuLogIn" destination="XL2-b8-IwM" id="t0s-gW-68X"/>
-                <outlet property="NoMADMenuLogInAlternate" destination="Wa6-S1-lXm" id="hAz-nN-kun"/>
+                <outlet property="PKINITMenuItem" destination="pkinit-item" id="pki-outlet-id"/>
                 <outlet property="NoMADMenuLogOut" destination="w1A-iF-wAU" id="SR8-ZH-087"/>
                 <outlet property="NoMADMenuPasswordExpires" destination="CUr-ED-n29" id="n6a-qc-0L0"/>
                 <outlet property="NoMADMenuPreferences" destination="3yQ-ft-CVW" id="iix-dH-1bd"/>

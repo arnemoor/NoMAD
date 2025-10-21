@@ -50,12 +50,30 @@ class HistoryAndThanks {
         return existingWork
     }
     
+    func lifeAfterJamf() -> String {
+
+        // When Jamf archived the project in 2024, a thankful user decided to give back and keep Carrie the Caribou alive
+
+        var communityEra = ""
+
+        communityEra.append("Jamf's last official release was v1.3.0 in January 2022.\n")
+        communityEra.append("The project was officially archived by Jamf on GitHub in 2024.\n")
+        communityEra.append("Arne Moor, a thankful NoMAD user, forked the project to continue its maintenance and modernization.\n")
+        communityEra.append("v2.0.0 was the first community fork release in October 2025, featuring Swift 5.10 modernization.\n")
+        communityEra.append("The fork added macOS 26 compatibility, complete localization, and comprehensive documentation.\n")
+        communityEra.append("All 22 pages from the original GitLab wiki were preserved in the docs/ folder.\n")
+        communityEra.append("Carrie the Caribou continues her nomadic journey, maintained by those who depend on her.\n")
+        communityEra.append("The original vision of AD features without binding lives on, one grateful fork at a time.\n")
+
+        return communityEra
+    }
+
     func thingsYouMayNotKnow() -> String {
-        
+
         // putting this here for possible future Easter Eggs on the MacAdmins podcast, we'll see if Charles or Tom find it. I bet Charles does, but then he'll forget he found it.
-        
+
         var esotericBits = ""
-        
+
         esotericBits.append("The original working name of NoMAD was NoAD. That didn't roll of the tongue so well.\n")
         esotericBits.append("NoAD's first commit was April 19, 2016. However, it was only superficially similar to what NoMAD is today.\n")
         esotericBits.append("NoMAD is short for No Mo' Active Directory.\n")
@@ -68,7 +86,7 @@ class HistoryAndThanks {
         esotericBits.append("I first publicly discussed NoMAD on the MacAdmins podcast on Sept. 5, 2016. My second appearance in that podcast was where I didin't record my audio and we had to do it all over again.\n")
         esotericBits.append("The first conference where I talked about NoMAD was at MacSysAdmin 2016. You can find the session on the site, macsysadmin.se\n")
         esotericBits.append("NoMAD was officially launched at the University of Utah Mac Managers meeting on Dec. 21, 2016.\n")
-        
+
         return esotericBits
     }
 }

@@ -1,0 +1,7 @@
+***Change Password Menu Options***
+
+By default the "Change Password" menu will present the user with a dialog box to change their password via Kerberos. However, that doesn't half to be the case. Since many organizations use third-party tools or web-based solutions to keep track of password changes instead of just Active Directory, NoMAD allows for a variety of options.
+
+- ```ChangePasswordType``` determines the type of action. Currently ```Kerberos```,```URL```, ```App```, and ```Task``` are supported. ```Kerberos``` will change the password in the standard way. This is the default action if nothing is specified in the prefences.```URL``` will open the specified URL in the user's default browser. ```App``` will launch whatever path you have specified. Both of the following options are essentially just issuing an ```open``` command followed by either the URL or path. ```Task``` is a bit more complicated in that it will run whatever CLI command or script you want. This is to make it very easy to launch scripts that manage a more complicated password change process..
+
+- ```GetHelpOptions``` determines the payload for ```GetHelpType```. For ```URL``` just put in an http:// or https:// url. For ```App``` put in the full path for an app or other executable you want to launch. For ```Task``` put in the CLI task that you would like to execute. Note: There are no options for the ```Kerberos``` setting.
