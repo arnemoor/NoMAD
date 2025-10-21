@@ -637,6 +637,7 @@ func performPasswordChange(username: String, currentPassword: String, newPasswor
             // Because the current console user is not AD.
             do {
                 try noMADUser.changeRemotePassword(currentPassword, newPassword1: newPassword1, newPassword2: newPassword2)
+                myLogger.logit(LogLevel.base, message: "Successfully changed AD password.")
             } catch let error as NoMADUserError {
                 myLogger.logit(LogLevel.base, message: error.description)
                 return error.description
@@ -669,11 +670,13 @@ func performPasswordChange(username: String, currentPassword: String, newPasswor
             // Try to change the current console user's password.
             do {
                 let changeSuccess = try noMADUser.changeCurrentConsoleUserPassword(currentPassword, newPassword1: newPassword1, newPassword2: newPassword2, forceChange: true)
-                
+
                 if changeSuccess != "" {
                     return changeSuccess
                 }
-                
+
+                myLogger.logit(LogLevel.base, message: "Successfully changed local Mac password.")
+
             } catch let error as NoMADUserError {
                 myLogger.logit(LogLevel.base, message: error.description)
                 return error.description
@@ -697,8 +700,10 @@ func performPasswordChange(username: String, currentPassword: String, newPasswor
             } catch {
                 return "Unknown error changing keychain password"
             }
+        } else if ( passwordChangeMethod == "NoMAD" && !doLocalPasswordSync ) {
+            myLogger.logit(LogLevel.info, message: "Not syncing local password because doLocalPasswordSync is false (check username match settings and block lists).")
         }
-        
+
         if useKeychain {
             do {
                 _ = try noMADUser.updateKeychainItem(newPassword1, newPassword2: newPassword2)
