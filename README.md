@@ -51,40 +51,13 @@ brew install gh
 
 ### Creating a Release
 
-**Automated Release (Recommended)**
+The repository includes automated release scripts for building, notarizing, and publishing releases. See **[docs/RELEASE.md](docs/RELEASE.md)** for complete instructions on:
 
-The repository includes automated release scripts for building, notarizing, and publishing releases:
-
-```bash
-# One-time setup: Configure notarization credentials
-cp .env.example .env
-# Edit .env with your Apple Developer credentials
-
-# Create a complete release (builds, notarizes, creates GitHub release)
-# Note: Run from project root directory
-scripts/release.sh
-```
-
-See [docs/RELEASE.md](docs/RELEASE.md) for detailed instructions on:
 - Setting up notarization with Apple
 - Configuring release credentials
+- Automated release process (`scripts/release.sh`)
 - Manual release process
 - Troubleshooting
-
-**Manual Release**
-
-If you prefer manual control:
-
-1. Update version in `NoMAD.xcodeproj` (MARKETING_VERSION)
-2. Commit changes and create git tag: `git tag -a v2.0.0 -m "Release v2.0.0"`
-3. Push commits and tag: `git push origin main && git push origin v2.0.0`
-4. Run automated script: `scripts/release.sh`
-
-The script will:
-- Clean and build with Xcode
-- Create archive and export for distribution
-- Generate notarized DMG in `Releases/`
-- Create GitHub release with release notes
 
 ## Building from Source
 

@@ -4,7 +4,7 @@ This directory contains the preserved documentation from the original NoMAD GitL
 
 ## Quick Links
 
-- **[Complete Preferences Reference](../PREFERENCES.md)** - Comprehensive documentation of all 70 user-configurable preferences
+- **[Complete Preferences Reference](../../PREFERENCES.md)** - Comprehensive documentation of all 70 user-configurable preferences
 - **[Preferences Evolution](preferences-evolution.md)** - Comparison between 2017 archived docs (23 prefs) and current docs (70 prefs), with complete version history
 - **[Preference Keys (Historical)](preference-keys.md)** - Link to archived original preferences documentation on Internet Archive
 
@@ -39,7 +39,7 @@ This directory contains the preserved documentation from the original NoMAD GitL
 - [Troubleshooting](troubleshooting.md) - Debug and diagnostic procedures
 - [Preference Keys](preference-keys.md) - Historical preferences reference
 
-### Release Notes
+### Historical Release Notes
 - [Version 1.1](v-1-1.md) - Released October 2, 2017
 - [Version 1.2](v-1-2.md) - Planned for March 2018
 
@@ -50,4 +50,4 @@ This directory contains the preserved documentation from the original NoMAD GitL
 
 These documents were copied from the NoMAD GitLab wiki on October 21, 2025, to preserve the community knowledge before the GitLab project archival. While some information may be dated, it provides valuable historical context and usage patterns.
 
-For the most current information about preferences and configuration, please refer to [PREFERENCES.md](../PREFERENCES.md) in the repository root, which is maintained and extracted directly from the source code.
+For the most current information about preferences and configuration, please refer to [PREFERENCES.md](../../PREFERENCES.md) in the repository root, which is maintained and extracted directly from the source code.
