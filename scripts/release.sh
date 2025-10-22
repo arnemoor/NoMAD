@@ -272,9 +272,13 @@ create_github_release() {
         NOTES="NoMAD ${VERSION} - See commit history for changes."
     fi
 
+    # Get the correct repository (origin, not upstream)
+    REPO=$(git remote get-url origin | sed 's/.*github.com[:/]\(.*\)\.git/\1/')
+
     # Create release
     gh release create "$TAG" \
-        --title "NoMAD v${VERSION} - Community Fork" \
+        --repo "$REPO" \
+        --title "NoMAD v${VERSION}" \
         --notes "$NOTES" \
         "$DMG_PATH"
 
