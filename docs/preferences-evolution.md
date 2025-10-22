@@ -20,7 +20,7 @@ The current NoMAD codebase contains **89 total preference keys** defined in code
 - v1.2.0: Planned but **never released** (jumped to v1.3.0)
 - v1.3.0: January 2022 (last official Jamf release)
   - **Note:** Jamf tagged as "1.3.0" but never updated Info.plist, which still showed "1.0.5"
-- v2.0.0: October 2025 (community fork release)
+- v2.0.0: October 2025 (independent fork release by Arne Moor)
   - Major refactoring and tech stack upgrade
   - Swift 5.10 modernization
   - macOS 26 compatibility

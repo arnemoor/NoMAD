@@ -1,6 +1,6 @@
-# NoMAD - Community Maintained Fork
+# NoMAD - Independently Maintained Fork
 
-A community-maintained fork of NoMAD with modern macOS support and Swift modernization.
+An independently maintained fork of NoMAD with modern macOS support and Swift modernization.
 
 ## About This Fork
 
@@ -39,16 +39,40 @@ Download the latest build from the [Releases](https://github.com/arnemoor/NoMAD/
 
 ### Creating a Release
 
-To create a new release:
+**Automated Release (Recommended)**
 
-1. Build the app using the Release configuration
-2. Create a release archive: `Product > Archive` in Xcode
-3. Export the app bundle from the Organizer
-4. Create a new release on GitHub:
-   - Go to [Releases](https://github.com/arnemoor/NoMAD/releases) → "Draft a new release"
-   - Tag version (e.g., `v1.2.0`)
-   - Upload the `.app` bundle (optionally in a `.zip` or `.dmg`)
-   - Add release notes describing changes
+The repository includes automated release scripts for building, notarizing, and publishing releases:
+
+```bash
+# One-time setup: Configure notarization credentials
+cp .env.example .env
+# Edit .env with your Apple Developer credentials
+
+# Create a complete release (builds, notarizes, creates GitHub release)
+# Note: Run from project root directory
+scripts/release.sh
+```
+
+See [docs/RELEASE.md](docs/RELEASE.md) for detailed instructions on:
+- Setting up notarization with Apple
+- Configuring release credentials
+- Manual release process
+- Troubleshooting
+
+**Manual Release**
+
+If you prefer manual control:
+
+1. Update version in `NoMAD.xcodeproj` (MARKETING_VERSION)
+2. Commit changes and create git tag: `git tag -a v2.0.0 -m "Release v2.0.0"`
+3. Push commits and tag: `git push origin main && git push origin v2.0.0`
+4. Run automated script: `scripts/release.sh`
+
+The script will:
+- Clean and build with Xcode
+- Create archive and export for distribution
+- Generate notarized DMG in `Releases/`
+- Create GitHub release with release notes
 
 ## Building from Source
 
@@ -75,10 +99,10 @@ NoMAD can be configured via:
 
 ### Documentation
 
-- **[Complete Preferences Reference](PREFERENCES.md)** - All 89 configuration options with examples
-- **[Menu Visibility Guide](PREFERENCES.md#menu-item-visibility-conditions)** - What controls each menu item
-- **[Configuration Examples](PREFERENCES.md#configuration-examples)** - Common deployment scenarios
-- **[Troubleshooting](PREFERENCES.md#troubleshooting)** - Debug logging and diagnostics
+- **[Complete Preferences Reference](docs/PREFERENCES.md)** - All 89 configuration options with examples
+- **[Menu Visibility Guide](docs/PREFERENCES.md#menu-item-visibility-conditions)** - What controls each menu item
+- **[Configuration Examples](docs/PREFERENCES.md#configuration-examples)** - Common deployment scenarios
+- **[Troubleshooting](docs/PREFERENCES.md#troubleshooting)** - Debug logging and diagnostics
 
 ### Quick Start
 
@@ -93,12 +117,11 @@ defaults write com.trusourcelabs.NoMAD LocalPasswordSync -bool true
 defaults write com.trusourcelabs.NoMAD PasswordExpireAlertTime -int 14
 ```
 
-See [PREFERENCES.md](PREFERENCES.md) for complete documentation.
+See [docs/PREFERENCES.md](docs/PREFERENCES.md) for complete documentation.
 
-## Community & Support
+## Support
 
 - **Issues**: Report bugs and feature requests in [GitHub Issues](https://github.com/arnemoor/NoMAD/issues)
-- **Discussions**: Join the original [MacAdmins Slack](https://macadmins.slack.com) #nomad channel
 - **Original Project**: [Jamf's archived NoMAD](https://github.com/jamf/NoMAD)
 
 ## Contributing
@@ -112,10 +135,11 @@ Contributions are welcome! Please:
 
 MIT License - see LICENSE file for details.
 
-Original code copyright Jamf, community fork maintained by contributors.
+Original code copyright Jamf. This fork is maintained independently by Arne Moor.
 
 ## Credits
 
-- Original NoMAD development team at Jamf
-- MacAdmins community for continued support
-- All contributors to this fork
+- Joel Rennich - Original creator at Trusource Labs (2016)
+- Ben Toms, Phillip Boushy, Peter Bukowinski, Francois Levaux-Tiffreau, Owen Pragel, Michael Lynn, Kyle Crawshaw, and the #secretgroup community
+- Jamf - Maintained the project after acquiring Trusource Labs
+- All contributors to the original project

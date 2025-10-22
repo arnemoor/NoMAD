@@ -1,6 +1,6 @@
 # NoMAD Preferences Reference
 
-> **Note:** This documentation incorporates and expands upon content from the [original NoMAD wiki](https://gitlab.com/Mactroll/NoMAD/-/wikis/home) and community contributions. The original NoMAD project by Jamf released versions up to v1.3.0 (January 2022, though Info.plist incorrectly showed "1.0.5") before being archived in 2024. This community fork v2.0.0 continues development with major refactoring and modernization.
+> **Note:** This documentation incorporates and expands upon content from the [original NoMAD wiki](https://gitlab.com/Mactroll/NoMAD/-/wikis/home). The original NoMAD project by Jamf released versions up to v1.3.0 (January 2022, though Info.plist incorrectly showed "1.0.5") before being archived in 2024. This independently maintained fork v2.0.0 continues development with major refactoring and modernization.
 >
 > **Historical reference:** The original preferences documentation from nomad.menu (February 2017, 23 preferences) is preserved on the [Internet Archive](https://web.archive.org/web/20170204180512/https://www.nomad.menu/help-center/preferences-and-what-they-do/). This current documentation is more comprehensive with **70 user-configurable preferences**, all extracted directly from the source code. See [docs/preferences-evolution.md](docs/preferences-evolution.md) for detailed version history and comparison.
 

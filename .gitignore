@@ -128,3 +128,15 @@ Intermediate-Docs/
 
 # Archive builds (keep only in releases)
 *.xcarchive
+default.profraw
+
+# Release configuration (contains sensitive credentials)
+.env
+
+# LLM agent files (keep local only, not in repo)
+AGENTS.md
+CLAUDE.md
+.claude/
+
+# Screenshots and local images
+screen-shot.png
