@@ -57,6 +57,13 @@ check_prerequisites() {
         exit 1
     fi
 
+    # Check for create-dmg
+    if ! command -v create-dmg &> /dev/null; then
+        echo -e "${RED}Error: create-dmg not found. Please install it:${NC}"
+        echo -e "${RED}  brew install create-dmg${NC}"
+        exit 1
+    fi
+
     # Check for gh (GitHub CLI)
     if ! command -v gh &> /dev/null; then
         echo -e "${YELLOW}Warning: GitHub CLI (gh) not found. Install with: brew install gh${NC}"
@@ -159,10 +166,20 @@ create_dmg() {
     # Remove existing DMG if it exists
     [ -f "$DMG_PATH" ] && rm "$DMG_PATH"
 
-    hdiutil create -volname "${PROJECT_NAME} ${VERSION}" \
-        -srcfolder "$EXPORTED_APP" \
-        -ov -format UDZO \
-        "$DMG_PATH"
+    # Create the DMG using create-dmg tool
+    echo "  Creating DMG with create-dmg..."
+
+    # create-dmg will add the Applications link automatically
+    create-dmg \
+        --volname "${PROJECT_NAME} ${VERSION}" \
+        --window-pos 200 120 \
+        --window-size 500 300 \
+        --icon-size 128 \
+        --icon "${PROJECT_NAME}.app" 125 150 \
+        --app-drop-link 375 150 \
+        --no-internet-enable \
+        "$DMG_PATH" \
+        "$EXPORTED_APP"
 
     echo -e "${GREEN}✓ DMG created: $DMG_NAME ($(du -h "$DMG_PATH" | cut -f1))${NC}"
 }

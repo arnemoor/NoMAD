@@ -7,13 +7,13 @@ This document describes the automated release process for NoMAD using the provid
 For a complete automated release (build, archive, notarize, GitHub release):
 
 ```bash
-./release.sh
+scripts/release.sh
 ```
 
 For just creating a DMG from the latest archive:
 
 ```bash
-./create-dmg.sh
+scripts/create-dmg.sh
 ```
 
 ## Prerequisites
@@ -22,16 +22,20 @@ For just creating a DMG from the latest archive:
 
 1. **Xcode** - For building and archiving
 2. **Command Line Tools** - `xcode-select --install`
+3. **create-dmg** - For creating installer DMGs with proper layout
+   ```bash
+   brew install create-dmg
+   ```
 
 ### Optional Tools (for full automation)
 
-3. **GitHub CLI** - For creating releases
+4. **GitHub CLI** - For creating releases
    ```bash
    brew install gh
    gh auth login
    ```
 
-4. **Apple Developer Account** - For notarization
+5. **Apple Developer Account** - For notarization
    - Active Apple Developer Program membership
    - App-specific password for notarization
 

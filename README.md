@@ -37,6 +37,18 @@ NoMAD allows macOS systems to integrate with Active Directory without traditiona
 
 Download the latest build from the [Releases](https://github.com/arnemoor/NoMAD/releases) page.
 
+### Prerequisites for Creating Releases
+
+Before creating releases, install the required tools:
+
+```bash
+# Install create-dmg for DMG creation
+brew install create-dmg
+
+# Optional: Install GitHub CLI for automated release publishing
+brew install gh
+```
+
 ### Creating a Release
 
 **Automated Release (Recommended)**

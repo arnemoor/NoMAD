@@ -53,12 +53,20 @@ if [ -f "$DMG_PATH" ]; then
     rm "$DMG_PATH"
 fi
 
-# Create the DMG
-echo -e "${BLUE}Creating DMG...${NC}"
-hdiutil create -volname "NoMAD $VERSION" \
-    -srcfolder "$APP_PATH" \
-    -ov -format UDZO \
-    "$DMG_PATH"
+# Create the DMG using create-dmg tool
+echo -e "${BLUE}Creating DMG with create-dmg...${NC}"
+
+# create-dmg will add the Applications link automatically
+create-dmg \
+    --volname "NoMAD $VERSION" \
+    --window-pos 200 120 \
+    --window-size 500 300 \
+    --icon-size 128 \
+    --icon "NoMAD.app" 125 150 \
+    --app-drop-link 375 150 \
+    --no-internet-enable \
+    "$DMG_PATH" \
+    "$APP_PATH"
 
 echo ""
 echo -e "${GREEN}✓ DMG created successfully!${NC}"
