@@ -718,9 +718,3 @@ Hold **Option** while clicking NoMAD menu to access "Dump Logs" - this writes ex
 # View NoMAD logs
 log show --predicate 'processImagePath CONTAINS "NoMAD"' --last 1h
 ```
-
-## See Also
-
-- [README.md](README.md) - Project overview
-- [CLAUDE.md](CLAUDE.md) - Development guide
-- [MacAdmins Slack #nomad](https://macadmins.slack.com) - Community support
