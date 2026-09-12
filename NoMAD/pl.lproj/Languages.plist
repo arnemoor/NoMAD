@@ -14,7 +14,7 @@
 		<key>comment</key>
 		<string>button for cancelling actions</string>
 		<key>value</key>
-		<string>Cancel</string>
+		<string>Anuluj</string>
 	</dict>
 	<key>CertConnectionError</key>
 	<dict>
@@ -65,12 +65,26 @@
 		<key>value</key>
 		<string>Zmień hasło</string>
 	</dict>
+	<key>NoMADMenuController-Connected</key>
+	<dict>
+		<key>comment</key>
+		<string>Status when connected to AD</string>
+		<key>value</key>
+		<string>Połączono</string>
+	</dict>
 	<key>NoMADMenuController-NoUser</key>
 	<dict>
 		<key>comment</key>
 		<string>User info when no user is available</string>
 		<key>value</key>
 		<string>Brak użytkownika</string>
+	</dict>
+	<key>NoMADMenuController-NotConnected</key>
+	<dict>
+		<key>comment</key>
+		<string>Status when not connected to AD</string>
+		<key>value</key>
+		<string>Brak połączenia</string>
 	</dict>
 	<key>NoMADMenuController-NotLoggedIn</key>
 	<dict>
@@ -91,7 +105,7 @@
 		<key>comment</key>
 		<string>Long text for how many days until your password expires</string>
 		<key>value</key>
-		<string>Hasło wygaśnie za: %@ days</string>
+		<string>Hasło wygaśnie za: %@ dni</string>
 	</dict>
 	<key>NoMADMenuController-RenewTickets</key>
 	<dict>
@@ -105,7 +119,7 @@
 		<key>comment</key>
 		<string>message when password is about to expire</string>
 		<key>value</key>
-		<string>Password about to expire!</string>
+		<string>Hasło wkrótce wygaśnie!</string>
 	</dict>
 	<key>PasswordChangeSuccessful</key>
 	<dict>

@@ -79,6 +79,13 @@
 		<key>value</key>
 		<string>No User</string>
 	</dict>
+	<key>NoMADMenuController-NotConnected</key>
+	<dict>
+		<key>comment</key>
+		<string>Status when not connected to AD</string>
+		<key>value</key>
+		<string>Not Connected</string>
+	</dict>
 	<key>NoMADMenuController-NotLoggedIn</key>
 	<dict>
 		<key>comment</key>

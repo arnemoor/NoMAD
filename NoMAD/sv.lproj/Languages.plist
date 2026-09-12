@@ -65,12 +65,26 @@
 		<key>value</key>
 		<string>Byt lösenord</string>
 	</dict>
+	<key>NoMADMenuController-Connected</key>
+	<dict>
+		<key>comment</key>
+		<string>Status when connected to AD</string>
+		<key>value</key>
+		<string>Ansluten</string>
+	</dict>
 	<key>NoMADMenuController-NoUser</key>
 	<dict>
 		<key>comment</key>
 		<string>User info when no user is available</string>
 		<key>value</key>
 		<string>Ingen användare</string>
+	</dict>
+	<key>NoMADMenuController-NotConnected</key>
+	<dict>
+		<key>comment</key>
+		<string>Status when not connected to AD</string>
+		<key>value</key>
+		<string>Inte ansluten</string>
 	</dict>
 	<key>NoMADMenuController-NotLoggedIn</key>
 	<dict>
@@ -105,7 +119,7 @@
 		<key>comment</key>
 		<string>message when password is about to expire</string>
 		<key>value</key>
-		<string>Password about to expire!</string>
+		<string>Lösenordet går snart ut!</string>
 	</dict>
 	<key>PasswordChangeSuccessful</key>
 	<dict>
