@@ -42,14 +42,14 @@
 		<key>comment</key>
 		<string>Label for old password</string>
 		<key>value</key>
-		<string>Old Password</string>
+		<string>Gammel adgangskode</string>
 	</dict>
 	<key>LoginWindow-PasswordLabel</key>
 	<dict>
 		<key>comment</key>
 		<string>Label for password</string>
 		<key>value</key>
-		<string>Password</string>
+		<string>Adgangskode</string>
 	</dict>
 	<key>NetworkLocalMismatch</key>
 	<dict>
@@ -70,28 +70,35 @@
 		<key>comment</key>
 		<string>Status when connected to AD</string>
 		<key>value</key>
-		<string>Connected</string>
+		<string>Forbundet</string>
 	</dict>
 	<key>NoMADMenuController-NoUser</key>
 	<dict>
 		<key>comment</key>
 		<string>User info when no user is available</string>
 		<key>value</key>
-		<string>No User</string>
+		<string>Ingen bruger</string>
+	</dict>
+	<key>NoMADMenuController-NotConnected</key>
+	<dict>
+		<key>comment</key>
+		<string>Status when not connected to AD</string>
+		<key>value</key>
+		<string>Ikke forbundet</string>
 	</dict>
 	<key>NoMADMenuController-NotLoggedIn</key>
 	<dict>
 		<key>comment</key>
 		<string>User info for ticket life when not signed in</string>
 		<key>value</key>
-		<string>Not logged in.</string>
+		<string>Ikke logget ind.</string>
 	</dict>
 	<key>NoMADMenuController-NotSignedIn</key>
 	<dict>
 		<key>comment</key>
 		<string>User info when not signed in</string>
 		<key>value</key>
-		<string>Not Signed In</string>
+		<string>Ikke logget ind</string>
 	</dict>
 	<key>NoMADMenuController-PasswordExpiresInDays</key>
 	<dict>
@@ -168,21 +175,21 @@
 		<key>comment</key>
 		<string>Password change notification ignore button</string>
 		<key>value</key>
-		<string>Ignore</string>
+		<string>Ignorer</string>
 	</dict>
 	<key>UserInformation-PasswordChanged</key>
 	<dict>
 		<key>comment</key>
 		<string>Notification title when password changed</string>
 		<key>value</key>
-		<string>Password Changed</string>
+		<string>Adgangskode ændret</string>
 	</dict>
 	<key>UserInformation-PwdChangedSignInAgain</key>
 	<dict>
 		<key>comment</key>
 		<string>Notification text asking to sign in again</string>
 		<key>value</key>
-		<string>Your password was changed, please re-sign into NoMAD to update your password.</string>
+		<string>Din adgangskode blev ændret. Log venligst ind i NoMAD igen for at opdatere din adgangskode.</string>
 	</dict>
 	<key>ValidCertificate</key>
 	<dict>

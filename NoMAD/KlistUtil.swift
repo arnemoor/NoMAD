@@ -154,8 +154,11 @@ class KlistUtil {
 
     func getExpiration() {
         if state {
+            var foundTGT = false
+
             for ticket in allTickets {
                 if ticket.Principal.contains("krbtgt") {
+                    foundTGT = true
                     expire = ticket.Expires
                     myLogger.logit(.debug, message:"Checking for expired tickets.")
                     // we need to check for an expired TGT and set state to false if we are
@@ -166,6 +169,13 @@ class KlistUtil {
                     }
                     break
                 }
+            }
+
+            // a cache can hold service tickets with no TGT at all, which is not a signed in state
+
+            if !foundTGT {
+                myLogger.logit(.base, message:"No TGT in the ticket cache")
+                state = false
             }
         } else {
             myLogger.logit(.debug, message:"No tickets, so no need to look for expired tickets.")
